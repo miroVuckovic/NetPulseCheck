@@ -16,8 +16,6 @@ namespace NetUptimeMonitor
             comboBoxLogLevel.SelectedItem = "ERROR";
         }
 
-
-
         #region backgroundWorker
 
         BackgroundWorker bWorker = new BackgroundWorker()
@@ -69,6 +67,7 @@ namespace NetUptimeMonitor
             labelTargetPing01.Text = "-";
             labelTargetPing02.Text = "-";
             labelTargetPing03.Text = "-";
+            checkBoxTargetsAll.Checked = true;
         }
 
         private void AutoFillDefaultTargets()
@@ -145,29 +144,6 @@ namespace NetUptimeMonitor
 
         private string PingTargets(string hostname, int timeout, string dnsName = "")
         {
-            //Ping ping = new Ping();
-
-            //try
-            //{
-            //    PingReply pingReply = ping.Send(hostname, timeout);
-            //    if (pingReply.Status == IPStatus.Success)
-            //    {
-            //        if (File.Exists(Logger.failLogFullPath)) {
-            //            File.Delete(Logger.failLogFullPath);
-            //            Logger.WriteLog(hostname + " (" + dnsName + ") = " + pingReply.RoundtripTime.ToString() + "ms");
-            //            return pingReply.RoundtripTime.ToString();
-            //        }
-
-            //    }
-            //    Logger.WriteLog(MsgStrings(0) + " " + hostname + " (" + dnsName + ")");
-            //    return MsgStrings(0);
-            //}
-            //catch (PingException ex)
-            //{
-            //    Logger.WriteLog(MsgStrings(0) + " " + hostname);
-            //    return MsgStrings(0);
-            //}
-
             Ping ping = new Ping();
 
             string logTextFail = MsgStrings(0) + " " + hostname + " (" + dnsName + ")";
@@ -176,7 +152,7 @@ namespace NetUptimeMonitor
 
             PingReply pingReply = ping.Send(hostname, timeout);
 
-            string logTextSuccess = "Reached " + hostname + " (" + dnsName + ")" + " with roundtrip time of " + pingReply.RoundtripTime + "ms";
+            string logTextSuccess = hostname + " = " + pingReply.RoundtripTime + " ms" + " - (" + dnsName + ")";
 
             try
             {
@@ -336,6 +312,10 @@ namespace NetUptimeMonitor
             buttonStop.Enabled = false;
 
             SetControls(true);
+
+            labelTargetPing01.Text = "-";
+            labelTargetPing02.Text = "-";
+            labelTargetPing03.Text = "-";
         }
 
         private void SetControls(bool state)
@@ -364,5 +344,6 @@ namespace NetUptimeMonitor
             Globals.logPath = selectedPath;
             textBoxLogPath.Text = selectedPath;
         }
+
     }
 }

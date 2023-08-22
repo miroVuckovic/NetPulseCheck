@@ -240,6 +240,7 @@
             checkBoxTargetsAll.TabIndex = 1;
             checkBoxTargetsAll.Text = "Select all / none";
             checkBoxTargetsAll.UseVisualStyleBackColor = true;
+            checkBoxTargetsAll.CheckedChanged += CheckBoxTargetsAll_CheckedChanged;
             // 
             // checkBoxActivate03
             // 
