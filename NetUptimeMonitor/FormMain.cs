@@ -2,7 +2,7 @@ using System.ComponentModel;
 using System.Net.NetworkInformation;
 using System.Timers;
 
-namespace NetUptimeMonitor
+namespace NetPulseCheck
 {
     public partial class FormMain : Form
     {
@@ -83,6 +83,8 @@ namespace NetUptimeMonitor
 
 
         #region ping
+
+        //static int interval = (int)textBoxInterval.Text;
 
         public void PingAllTargets()
         {
@@ -294,6 +296,12 @@ namespace NetUptimeMonitor
 
         private void ButtonStart_Click(object sender, EventArgs e)
         {
+            if (!checkBoxActivate01.Checked && !checkBoxActivate02.Checked && !checkBoxActivate03.Checked)
+            {
+                MessageBox.Show("Nothing selected.\n\nPlease check at least one target.", Application.ProductName);
+                return;
+            }
+
             SetPingTimer(2000);
             bWorker.RunWorkerAsync();
 

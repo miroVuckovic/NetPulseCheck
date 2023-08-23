@@ -1,4 +1,4 @@
-namespace NetUptimeMonitor
+namespace NetPulseCheck
 {
     internal static class Program
     {

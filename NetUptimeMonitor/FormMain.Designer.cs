@@ -1,4 +1,4 @@
-﻿namespace NetUptimeMonitor
+﻿namespace NetPulseCheck
 {
     partial class FormMain
     {
@@ -33,6 +33,8 @@
             tabControlMain = new TabControl();
             tabPageControls = new TabPage();
             groupBoxControls = new GroupBox();
+            labelInterval = new Label();
+            textBoxInterval = new TextBox();
             buttonStop = new Button();
             buttonStart = new Button();
             labelTargetPing03 = new Label();
@@ -87,6 +89,8 @@
             // 
             // groupBoxControls
             // 
+            groupBoxControls.Controls.Add(labelInterval);
+            groupBoxControls.Controls.Add(textBoxInterval);
             groupBoxControls.Controls.Add(buttonStop);
             groupBoxControls.Controls.Add(buttonStart);
             groupBoxControls.Controls.Add(labelTargetPing03);
@@ -110,6 +114,24 @@
             groupBoxControls.Size = new Size(690, 247);
             groupBoxControls.TabIndex = 0;
             groupBoxControls.TabStop = false;
+            // 
+            // labelInterval
+            // 
+            labelInterval.AutoSize = true;
+            labelInterval.Location = new Point(207, 156);
+            labelInterval.Name = "labelInterval";
+            labelInterval.Size = new Size(121, 15);
+            labelInterval.TabIndex = 8;
+            labelInterval.Text = "Request interval (ms):";
+            // 
+            // textBoxInterval
+            // 
+            textBoxInterval.Location = new Point(334, 151);
+            textBoxInterval.Name = "textBoxInterval";
+            textBoxInterval.Size = new Size(116, 23);
+            textBoxInterval.TabIndex = 7;
+            textBoxInterval.Text = "5000";
+            textBoxInterval.TextAlign = HorizontalAlignment.Right;
             // 
             // buttonStop
             // 
@@ -135,7 +157,7 @@
             // labelTargetPing03
             // 
             labelTargetPing03.AutoSize = true;
-            labelTargetPing03.Location = new Point(458, 108);
+            labelTargetPing03.Location = new Point(520, 108);
             labelTargetPing03.Name = "labelTargetPing03";
             labelTargetPing03.Size = new Size(12, 15);
             labelTargetPing03.TabIndex = 4;
@@ -144,7 +166,7 @@
             // labelTargetPing02
             // 
             labelTargetPing02.AutoSize = true;
-            labelTargetPing02.Location = new Point(458, 83);
+            labelTargetPing02.Location = new Point(520, 83);
             labelTargetPing02.Name = "labelTargetPing02";
             labelTargetPing02.Size = new Size(12, 15);
             labelTargetPing02.TabIndex = 4;
@@ -153,7 +175,7 @@
             // labelTargetPing01
             // 
             labelTargetPing01.AutoSize = true;
-            labelTargetPing01.Location = new Point(458, 58);
+            labelTargetPing01.Location = new Point(520, 58);
             labelTargetPing01.Name = "labelTargetPing01";
             labelTargetPing01.Size = new Size(12, 15);
             labelTargetPing01.TabIndex = 4;
@@ -163,42 +185,42 @@
             // 
             textBoxTargetIp03.Location = new Point(52, 105);
             textBoxTargetIp03.Name = "textBoxTargetIp03";
-            textBoxTargetIp03.Size = new Size(127, 23);
+            textBoxTargetIp03.Size = new Size(149, 23);
             textBoxTargetIp03.TabIndex = 3;
             // 
             // textBoxTargetIp02
             // 
             textBoxTargetIp02.Location = new Point(52, 80);
             textBoxTargetIp02.Name = "textBoxTargetIp02";
-            textBoxTargetIp02.Size = new Size(127, 23);
+            textBoxTargetIp02.Size = new Size(149, 23);
             textBoxTargetIp02.TabIndex = 3;
             // 
             // textBoxTargetDesc03
             // 
             textBoxTargetDesc03.Location = new Point(207, 105);
             textBoxTargetDesc03.Name = "textBoxTargetDesc03";
-            textBoxTargetDesc03.Size = new Size(220, 23);
+            textBoxTargetDesc03.Size = new Size(243, 23);
             textBoxTargetDesc03.TabIndex = 3;
             // 
             // textBoxTargetDesc02
             // 
             textBoxTargetDesc02.Location = new Point(207, 80);
             textBoxTargetDesc02.Name = "textBoxTargetDesc02";
-            textBoxTargetDesc02.Size = new Size(220, 23);
+            textBoxTargetDesc02.Size = new Size(243, 23);
             textBoxTargetDesc02.TabIndex = 3;
             // 
             // textBoxTargetDesc01
             // 
             textBoxTargetDesc01.Location = new Point(207, 55);
             textBoxTargetDesc01.Name = "textBoxTargetDesc01";
-            textBoxTargetDesc01.Size = new Size(220, 23);
+            textBoxTargetDesc01.Size = new Size(243, 23);
             textBoxTargetDesc01.TabIndex = 3;
             // 
             // textBoxTargetIp01
             // 
             textBoxTargetIp01.Location = new Point(52, 55);
             textBoxTargetIp01.Name = "textBoxTargetIp01";
-            textBoxTargetIp01.Size = new Size(127, 23);
+            textBoxTargetIp01.Size = new Size(149, 23);
             textBoxTargetIp01.TabIndex = 3;
             // 
             // labelTargetPing
@@ -215,21 +237,21 @@
             // 
             labelTargetDNS.AutoSize = true;
             labelTargetDNS.Font = new Font("Segoe UI", 11.25F, FontStyle.Bold, GraphicsUnit.Point);
-            labelTargetDNS.Location = new Point(207, 28);
+            labelTargetDNS.Location = new Point(242, 28);
             labelTargetDNS.Name = "labelTargetDNS";
-            labelTargetDNS.Size = new Size(89, 20);
+            labelTargetDNS.Size = new Size(136, 20);
             labelTargetDNS.TabIndex = 2;
-            labelTargetDNS.Text = "Target DNS";
+            labelTargetDNS.Text = "Target description";
             // 
             // labelTargetIp
             // 
             labelTargetIp.AutoSize = true;
             labelTargetIp.Font = new Font("Segoe UI", 11.25F, FontStyle.Bold, GraphicsUnit.Point);
-            labelTargetIp.Location = new Point(52, 28);
+            labelTargetIp.Location = new Point(73, 28);
             labelTargetIp.Name = "labelTargetIp";
-            labelTargetIp.Size = new Size(72, 20);
+            labelTargetIp.Size = new Size(110, 20);
             labelTargetIp.TabIndex = 2;
-            labelTargetIp.Text = "Target IP";
+            labelTargetIp.Text = "Target IP/DNS";
             // 
             // checkBoxTargetsAll
             // 
@@ -343,8 +365,9 @@
             Icon = (Icon)resources.GetObject("$this.Icon");
             MaximizeBox = false;
             MaximumSize = new Size(750, 350);
+            MinimumSize = new Size(750, 350);
             Name = "FormMain";
-            Text = "NetUptimeMonitor";
+            Text = "NetPulseCheck";
             tabControlMain.ResumeLayout(false);
             tabPageControls.ResumeLayout(false);
             groupBoxControls.ResumeLayout(false);
@@ -384,5 +407,7 @@
         private Button buttonSetLogDir;
         private ComboBox comboBoxLogLevel;
         private Label label1;
+        private TextBox textBoxInterval;
+        private Label labelInterval;
     }
 }
