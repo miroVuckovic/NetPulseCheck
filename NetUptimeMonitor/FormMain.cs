@@ -173,7 +173,7 @@ namespace NetPulseCheck
                         //DisplayNotification(Application.ProductName, "Destination timed out", 2000, true);
                         return "Destination timed out";
                     default:
-                        Logger.WriteLog(logTextSuccess);
+                        //Logger.WriteLog(logTextSuccess);
                         //DisplayNotification(Application.ProductName, "Destination success", 2000, true);
                         return "" + pingReply.RoundtripTime;
                 }
