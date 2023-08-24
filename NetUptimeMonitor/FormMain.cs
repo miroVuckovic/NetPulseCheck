@@ -14,6 +14,9 @@ namespace NetPulseCheck
             notifyIconMain.Visible = true;
             buttonStop.Enabled = false;
             comboBoxLogLevel.SelectedItem = "ERROR";
+            SetPingInterval();
+            SaveAllSettings();
+            ReadAllSettings();
         }
 
         #region backgroundWorker
@@ -88,9 +91,9 @@ namespace NetPulseCheck
 
         public void PingAllTargets()
         {
-            PingTarget01("8.8.8.8", 2000);
-            PingTarget02("1.1.1.1", 2000);
-            PingTarget03("4.2.2.2", 2000);
+            PingTarget01(textBoxTargetIp01.Text, Convert.ToInt32(pingInterval));
+            PingTarget02(textBoxTargetIp02.Text, Convert.ToInt32(pingInterval));
+            PingTarget03(textBoxTargetIp03.Text, Convert.ToInt32(pingInterval));
         }
 
         public void PingTarget01(string hostname, int time)
@@ -173,7 +176,7 @@ namespace NetPulseCheck
                         //DisplayNotification(Application.ProductName, "Destination timed out", 2000, true);
                         return "Destination timed out";
                     default:
-                        //Logger.WriteLog(logTextSuccess);
+                        Logger.WriteLog(logTextSuccess);
                         //DisplayNotification(Application.ProductName, "Destination success", 2000, true);
                         return "" + pingReply.RoundtripTime;
                 }
@@ -196,9 +199,18 @@ namespace NetPulseCheck
 
         System.Timers.Timer pingTimer = new System.Timers.Timer();
 
-        private void SetTimerInterval(double interval)
+        private double pingInterval;
+
+        private void SetPingInterval()
         {
-            pingTimer.Interval = interval;
+            double interval = Convert.ToDouble(textBoxInterval.Text);
+
+            pingInterval = interval;
+        }
+     
+        private void SetTimerInterval()
+        {
+            pingTimer.Interval = pingInterval;
         }
 
         private void SetPingTimer(double interval)
@@ -213,9 +225,9 @@ namespace NetPulseCheck
 
         private void OnTimedEvent(object source, ElapsedEventArgs e)
         {
-            PingTarget01(textBoxTargetIp01.Text, 2000);
-            PingTarget02(textBoxTargetIp02.Text, 2000);
-            PingTarget03(textBoxTargetIp03.Text, 2000);
+            PingTarget01(textBoxTargetIp01.Text, Convert.ToInt32(pingInterval));
+            PingTarget02(textBoxTargetIp02.Text, Convert.ToInt32(pingInterval));
+            PingTarget03(textBoxTargetIp03.Text, Convert.ToInt32(pingInterval));
         }
 
         #endregion
@@ -302,13 +314,15 @@ namespace NetPulseCheck
                 return;
             }
 
-            SetPingTimer(2000);
+            SetPingTimer(pingInterval);
             bWorker.RunWorkerAsync();
 
             buttonStart.Enabled = false;
             buttonStop.Enabled = true;
 
             SetControls(false);
+
+            SaveAllSettings();
         }
 
         private void ButtonStop_Click(object sender, EventArgs e)
@@ -338,6 +352,7 @@ namespace NetPulseCheck
             textBoxTargetDesc02.Enabled = state;
             textBoxTargetDesc03.Enabled = state;
             checkBoxTargetsAll.Enabled = state;
+            textBoxInterval.Enabled = state;
         }
 
         private void ButtonSetLogDir_Click(object sender, EventArgs e)
@@ -351,7 +366,68 @@ namespace NetPulseCheck
             string selectedPath = folderBrowserDialog.SelectedPath;
             Globals.logPath = selectedPath;
             textBoxLogPath.Text = selectedPath;
+            SaveSetting("textBoxLogPath", selectedPath);
         }
+
+        #region Settings
+
+        private static void SaveSetting(string key, string value)
+        {
+            SettingsHandler.SaveSetting(key, value);
+        }
+
+        private static string ReadSetting(string key)
+        {
+            string setting;
+
+            setting = SettingsHandler.ReadSetting(key);
+
+            return setting;
+        }
+
+        private void SaveAllSettings()
+        {
+            SaveSetting("checkBoxActivate01", Convert.ToString(Convert.ToBoolean(checkBoxActivate01.CheckState)));
+            SaveSetting("checkBoxActivate02", Convert.ToString(Convert.ToBoolean(checkBoxActivate02.CheckState)));
+            SaveSetting("checkBoxActivate03", Convert.ToString(Convert.ToBoolean(checkBoxActivate03.CheckState)));
+
+            SaveSetting("textBoxTargetIp01", textBoxTargetIp01.Text);
+            SaveSetting("textBoxTargetIp02", textBoxTargetIp02.Text);
+            SaveSetting("textBoxTargetIp03", textBoxTargetIp03.Text);
+
+            SaveSetting("textBoxTargetDesc01", textBoxTargetDesc01.Text);
+            SaveSetting("textBoxTargetDesc02", textBoxTargetDesc02.Text);
+            SaveSetting("textBoxTargetDesc03", textBoxTargetDesc03.Text);
+
+            SaveSetting("textBoxInterval", textBoxInterval.Text);
+
+            SaveSetting("textBoxLogPath", textBoxLogPath.Text);
+
+            SaveSetting("comboBoxLogLevel", comboBoxLogLevel.Text);
+        }
+
+        private void ReadAllSettings()
+        {
+            checkBoxActivate01.Checked = Convert.ToBoolean(ReadSetting("checkBoxActivate01"));
+            checkBoxActivate02.Checked = Convert.ToBoolean(ReadSetting("checkBoxActivate02"));
+            checkBoxActivate03.Checked = Convert.ToBoolean(ReadSetting("checkBoxActivate03"));
+
+            textBoxTargetIp01.Text = ReadSetting("textBoxTargetIp01");
+            textBoxTargetIp02.Text = ReadSetting("textBoxTargetIp02");
+            textBoxTargetIp03.Text = ReadSetting("textBoxTargetIp03");
+
+            textBoxTargetDesc01.Text = ReadSetting("textBoxTargetDesc01");
+            textBoxTargetDesc02.Text = ReadSetting("textBoxTargetDesc02");
+            textBoxTargetDesc03.Text = ReadSetting("textBoxTargetDesc03");
+
+            textBoxInterval.Text = ReadSetting("textBoxInterval");
+
+            textBoxLogPath.Text = ReadSetting("textBoxLogPath");
+
+            comboBoxLogLevel.SelectedItem = ReadSetting("comboBoxLogLevel");
+        }
+
+        #endregion
 
     }
 }
