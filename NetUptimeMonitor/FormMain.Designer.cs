@@ -54,16 +54,24 @@
             checkBoxActivate02 = new CheckBox();
             checkBoxActivate01 = new CheckBox();
             tabPageOptions = new TabPage();
+            groupBoxOptionsApp = new GroupBox();
+            groupBoxLogging = new GroupBox();
+            labelLogDirPath = new Label();
             comboBoxLogLevel = new ComboBox();
+            label1 = new Label();
             buttonSetLogDir = new Button();
             textBoxLogPath = new TextBox();
-            label1 = new Label();
-            labelLogDirPath = new Label();
             notifyIconMain = new NotifyIcon(components);
+            contextMenuStripMain = new ContextMenuStrip(components);
+            toolStripMenuItemMaximize = new ToolStripMenuItem();
+            toolStripMenuItemStart = new ToolStripMenuItem();
+            toolStripMenuItemStop = new ToolStripMenuItem();
             tabControlMain.SuspendLayout();
             tabPageControls.SuspendLayout();
             groupBoxControls.SuspendLayout();
             tabPageOptions.SuspendLayout();
+            groupBoxLogging.SuspendLayout();
+            contextMenuStripMain.SuspendLayout();
             SuspendLayout();
             // 
             // tabControlMain
@@ -293,11 +301,8 @@
             // 
             // tabPageOptions
             // 
-            tabPageOptions.Controls.Add(comboBoxLogLevel);
-            tabPageOptions.Controls.Add(buttonSetLogDir);
-            tabPageOptions.Controls.Add(textBoxLogPath);
-            tabPageOptions.Controls.Add(label1);
-            tabPageOptions.Controls.Add(labelLogDirPath);
+            tabPageOptions.Controls.Add(groupBoxOptionsApp);
+            tabPageOptions.Controls.Add(groupBoxLogging);
             tabPageOptions.Location = new Point(4, 24);
             tabPageOptions.Name = "tabPageOptions";
             tabPageOptions.Padding = new Padding(3);
@@ -306,18 +311,60 @@
             tabPageOptions.Text = "Options";
             tabPageOptions.UseVisualStyleBackColor = true;
             // 
+            // groupBoxOptionsApp
+            // 
+            groupBoxOptionsApp.Location = new Point(6, 116);
+            groupBoxOptionsApp.Name = "groupBoxOptionsApp";
+            groupBoxOptionsApp.Size = new Size(690, 137);
+            groupBoxOptionsApp.TabIndex = 5;
+            groupBoxOptionsApp.TabStop = false;
+            groupBoxOptionsApp.Text = "Application";
+            // 
+            // groupBoxLogging
+            // 
+            groupBoxLogging.Controls.Add(labelLogDirPath);
+            groupBoxLogging.Controls.Add(comboBoxLogLevel);
+            groupBoxLogging.Controls.Add(label1);
+            groupBoxLogging.Controls.Add(buttonSetLogDir);
+            groupBoxLogging.Controls.Add(textBoxLogPath);
+            groupBoxLogging.Location = new Point(6, 6);
+            groupBoxLogging.Name = "groupBoxLogging";
+            groupBoxLogging.Size = new Size(690, 104);
+            groupBoxLogging.TabIndex = 4;
+            groupBoxLogging.TabStop = false;
+            groupBoxLogging.Text = "Logging";
+            // 
+            // labelLogDirPath
+            // 
+            labelLogDirPath.AutoSize = true;
+            labelLogDirPath.Location = new Point(6, 19);
+            labelLogDirPath.Name = "labelLogDirPath";
+            labelLogDirPath.Size = new Size(99, 15);
+            labelLogDirPath.TabIndex = 0;
+            labelLogDirPath.Text = "Log file directory:";
+            // 
             // comboBoxLogLevel
             // 
+            comboBoxLogLevel.DropDownStyle = ComboBoxStyle.DropDownList;
             comboBoxLogLevel.FormattingEnabled = true;
             comboBoxLogLevel.Items.AddRange(new object[] { "ERROR", "DEBUG", "TRACE" });
-            comboBoxLogLevel.Location = new Point(121, 76);
+            comboBoxLogLevel.Location = new Point(121, 62);
             comboBoxLogLevel.Name = "comboBoxLogLevel";
             comboBoxLogLevel.Size = new Size(285, 23);
             comboBoxLogLevel.TabIndex = 3;
             // 
+            // label1
+            // 
+            label1.AutoSize = true;
+            label1.Location = new Point(6, 65);
+            label1.Name = "label1";
+            label1.Size = new Size(57, 15);
+            label1.TabIndex = 0;
+            label1.Text = "Log level:";
+            // 
             // buttonSetLogDir
             // 
-            buttonSetLogDir.Location = new Point(412, 29);
+            buttonSetLogDir.Location = new Point(412, 15);
             buttonSetLogDir.Name = "buttonSetLogDir";
             buttonSetLogDir.Size = new Size(75, 23);
             buttonSetLogDir.TabIndex = 2;
@@ -327,34 +374,45 @@
             // 
             // textBoxLogPath
             // 
-            textBoxLogPath.Location = new Point(121, 30);
+            textBoxLogPath.Location = new Point(121, 16);
             textBoxLogPath.Name = "textBoxLogPath";
             textBoxLogPath.Size = new Size(285, 23);
             textBoxLogPath.TabIndex = 1;
             // 
-            // label1
-            // 
-            label1.AutoSize = true;
-            label1.Location = new Point(6, 79);
-            label1.Name = "label1";
-            label1.Size = new Size(57, 15);
-            label1.TabIndex = 0;
-            label1.Text = "Log level:";
-            // 
-            // labelLogDirPath
-            // 
-            labelLogDirPath.AutoSize = true;
-            labelLogDirPath.Location = new Point(6, 33);
-            labelLogDirPath.Name = "labelLogDirPath";
-            labelLogDirPath.Size = new Size(99, 15);
-            labelLogDirPath.TabIndex = 0;
-            labelLogDirPath.Text = "Log file directory:";
-            // 
             // notifyIconMain
             // 
+            notifyIconMain.ContextMenuStrip = contextMenuStripMain;
             notifyIconMain.Icon = (Icon)resources.GetObject("notifyIconMain.Icon");
-            notifyIconMain.Text = "notifyIconMain";
+            notifyIconMain.Text = "NetPulseCheck";
             notifyIconMain.Visible = true;
+            notifyIconMain.MouseDoubleClick += NotifyIconMain_MouseDoubleClick;
+            // 
+            // contextMenuStripMain
+            // 
+            contextMenuStripMain.Items.AddRange(new ToolStripItem[] { toolStripMenuItemMaximize, toolStripMenuItemStart, toolStripMenuItemStop });
+            contextMenuStripMain.Name = "contextMenuStripMain";
+            contextMenuStripMain.Size = new Size(187, 70);
+            // 
+            // toolStripMenuItemMaximize
+            // 
+            toolStripMenuItemMaximize.Name = "toolStripMenuItemMaximize";
+            toolStripMenuItemMaximize.Size = new Size(186, 22);
+            toolStripMenuItemMaximize.Text = "Open NetPulseCheck";
+            toolStripMenuItemMaximize.Click += ToolStripMenuItemMaximize_Click;
+            // 
+            // toolStripMenuItemStart
+            // 
+            toolStripMenuItemStart.Name = "toolStripMenuItemStart";
+            toolStripMenuItemStart.Size = new Size(186, 22);
+            toolStripMenuItemStart.Text = "Start monitoring";
+            toolStripMenuItemStart.Click += ToolStripMenuItemStart_Click;
+            // 
+            // toolStripMenuItemStop
+            // 
+            toolStripMenuItemStop.Name = "toolStripMenuItemStop";
+            toolStripMenuItemStop.Size = new Size(186, 22);
+            toolStripMenuItemStop.Text = "Stop monitoring";
+            toolStripMenuItemStop.Click += ToolStripMenuItemStop_Click;
             // 
             // FormMain
             // 
@@ -367,13 +425,18 @@
             MaximumSize = new Size(750, 350);
             MinimumSize = new Size(750, 350);
             Name = "FormMain";
+            StartPosition = FormStartPosition.CenterScreen;
             Text = "NetPulseCheck";
+            MouseDoubleClick += NotifyIconMain_MouseDoubleClick;
+            Resize += FormMain_Resize;
             tabControlMain.ResumeLayout(false);
             tabPageControls.ResumeLayout(false);
             groupBoxControls.ResumeLayout(false);
             groupBoxControls.PerformLayout();
             tabPageOptions.ResumeLayout(false);
-            tabPageOptions.PerformLayout();
+            groupBoxLogging.ResumeLayout(false);
+            groupBoxLogging.PerformLayout();
+            contextMenuStripMain.ResumeLayout(false);
             ResumeLayout(false);
         }
 
@@ -409,5 +472,11 @@
         private Label label1;
         private TextBox textBoxInterval;
         private Label labelInterval;
+        private GroupBox groupBoxLogging;
+        private GroupBox groupBoxOptionsApp;
+        private ContextMenuStrip contextMenuStripMain;
+        private ToolStripMenuItem toolStripMenuItemStart;
+        private ToolStripMenuItem toolStripMenuItemStop;
+        private ToolStripMenuItem toolStripMenuItemMaximize;
     }
 }

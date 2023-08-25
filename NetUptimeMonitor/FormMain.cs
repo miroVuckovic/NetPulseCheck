@@ -1,6 +1,7 @@
 using System.ComponentModel;
 using System.Net.NetworkInformation;
 using System.Timers;
+using System.Windows.Forms;
 
 namespace NetPulseCheck
 {
@@ -15,7 +16,7 @@ namespace NetPulseCheck
             buttonStop.Enabled = false;
             comboBoxLogLevel.SelectedItem = "ERROR";
             SetPingInterval();
-            SaveAllSettings();
+            //SaveAllSettings();
             ReadAllSettings();
         }
 
@@ -151,13 +152,11 @@ namespace NetPulseCheck
         {
             Ping ping = new Ping();
 
-            string logTextFail = MsgStrings(0) + " " + hostname + " (" + dnsName + ")";
-            string notifTextFail = "Connection fail detected" + " for" + hostname + " (" + dnsName + ")";
-
-
             PingReply pingReply = ping.Send(hostname, timeout);
 
             string logTextSuccess = hostname + " = " + pingReply.RoundtripTime + " ms" + " - (" + dnsName + ")";
+            string logTextFail = MsgStrings(0) + " " + hostname + " (" + dnsName + ")";
+            string notifTextFail = "Connection fail detected" + " for" + hostname + " (" + dnsName + ")";
 
             try
             {
@@ -207,7 +206,7 @@ namespace NetPulseCheck
 
             pingInterval = interval;
         }
-     
+
         private void SetTimerInterval()
         {
             pingTimer.Interval = pingInterval;
@@ -308,6 +307,11 @@ namespace NetPulseCheck
 
         private void ButtonStart_Click(object sender, EventArgs e)
         {
+            StartMonitoring();
+        }
+
+        private void StartMonitoring()
+        {
             if (!checkBoxActivate01.Checked && !checkBoxActivate02.Checked && !checkBoxActivate03.Checked)
             {
                 MessageBox.Show("Nothing selected.\n\nPlease check at least one target.", Application.ProductName);
@@ -326,6 +330,11 @@ namespace NetPulseCheck
         }
 
         private void ButtonStop_Click(object sender, EventArgs e)
+        {
+            StopMonitoring();
+        }
+
+        private void StopMonitoring()
         {
             StopTimer();
             bWorker.CancelAsync();
@@ -429,5 +438,48 @@ namespace NetPulseCheck
 
         #endregion
 
+        private void ToolStripMenuItemStart_Click(object sender, EventArgs e)
+        {
+            StartMonitoring();
+        }
+
+        private void ToolStripMenuItemStop_Click(object sender, EventArgs e)
+        {
+            StopMonitoring();
+        }
+
+        private void ToolStripMenuItemMaximize_Click(object sender, EventArgs e)
+        {
+            FormMain_Resize(toolStripMenuItemMaximize, e);
+        }
+
+        void FormMain_Resize(object sender, EventArgs e)
+        {
+            if (WindowState == FormWindowState.Minimized)
+            {
+                ShowInTaskbar = true;
+                Hide();
+                notifyIconMain.Visible = true;
+            }
+        }
+
+        private void NotifyIconMain_MouseDoubleClick(object sender, MouseEventArgs e)
+        {
+            Show();
+            WindowState = FormWindowState.Normal;
+            notifyIconMain.Visible = false;
+        }
+
+        void FormMain_Show(object sender, EventArgs e)
+        {
+            if (WindowState == FormWindowState.Minimized)
+            {
+                WindowState = FormWindowState.Normal;
+            }
+            ShowInTaskbar = true;
+            Show();
+            Focus();
+            notifyIconMain.Visible = false;
+        }
     }
 }

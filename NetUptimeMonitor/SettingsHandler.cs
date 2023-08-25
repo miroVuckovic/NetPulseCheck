@@ -34,16 +34,14 @@ namespace NetPulseCheck
 
         public static string ReadSetting(string key)
         {
-            string result = string.Empty;
-
+            string result;
             try
             {
                 var appSettings = ConfigurationManager.AppSettings;
-                result = appSettings[key] ?? "Not Found";
+                result = appSettings[key];
             }
             catch (ConfigurationErrorsException)
             {
-                //MessageBox.Show("Error reading app settings", Application.ProductName);
                 result = "false";
             }
 
