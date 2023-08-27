@@ -150,7 +150,7 @@ namespace NetPulseCheck
 
         private string PingTargets(string hostname, int timeout, string dnsName = "")
         {
-            Ping ping = new Ping();
+            Ping ping = new();
 
             PingReply pingReply = ping.Send(hostname, timeout);
 
@@ -164,18 +164,22 @@ namespace NetPulseCheck
                 {
                     case IPStatus.DestinationHostUnreachable:
                         Logger.WriteLog(logTextFail);
+                        //richTextBoxLog.AppendText(logTextFail);
                         //DisplayNotification(Application.ProductName, "Destination host unreachable", 2000, true);
                         return "Destination host unreachable";
                     case IPStatus.DestinationUnreachable:
                         Logger.WriteLog(logTextFail);
+                        //richTextBoxLog.AppendText(logTextFail);
                         //DisplayNotification(Application.ProductName, "Destination unreachable", 2000, true);
                         return "Destination unreachable";
                     case IPStatus.TimedOut:
                         Logger.WriteLog(logTextFail);
+                        //richTextBoxLog.AppendText(logTextFail);
                         //DisplayNotification(Application.ProductName, "Destination timed out", 2000, true);
                         return "Destination timed out";
                     default:
                         Logger.WriteLog(logTextSuccess);
+                        //richTextBoxLog.AppendText(logTextSuccess);
                         //DisplayNotification(Application.ProductName, "Destination success", 2000, true);
                         return "" + pingReply.RoundtripTime;
                 }
@@ -183,6 +187,7 @@ namespace NetPulseCheck
             catch
             {
                 Logger.WriteLog(logTextFail);
+                richTextBoxLog.AppendText(logTextFail);
                 //DisplayNotification(Application.ProductName, "Destination exception", 2000, true);
                 while (pingReply.Status == IPStatus.DestinationHostUnreachable)
                 {
@@ -307,7 +312,8 @@ namespace NetPulseCheck
 
         private void ButtonStart_Click(object sender, EventArgs e)
         {
-            StartMonitoring();
+            StartMonitoring();        
+
         }
 
         private void StartMonitoring()
@@ -320,6 +326,9 @@ namespace NetPulseCheck
 
             SetPingTimer(pingInterval);
             bWorker.RunWorkerAsync();
+
+            richTextBoxLog.AppendText("Monitoring started.\n");
+            Logger.WriteLog("Monitoring started.");
 
             buttonStart.Enabled = false;
             buttonStop.Enabled = true;
@@ -343,6 +352,9 @@ namespace NetPulseCheck
             buttonStop.Enabled = false;
 
             SetControls(true);
+
+            richTextBoxLog.AppendText("Monitoring stopped.\n");
+            Logger.WriteLog("Monitoring stopped.");
 
             labelTargetPing01.Text = "-";
             labelTargetPing02.Text = "-";
@@ -431,7 +443,10 @@ namespace NetPulseCheck
 
             textBoxInterval.Text = ReadSetting("textBoxInterval");
 
-            textBoxLogPath.Text = ReadSetting("textBoxLogPath");
+            string logPath = ReadSetting("textBoxLogPath");
+
+            textBoxLogPath.Text = logPath;
+            Globals.logPath = logPath;
 
             comboBoxLogLevel.SelectedItem = ReadSetting("comboBoxLogLevel");
         }

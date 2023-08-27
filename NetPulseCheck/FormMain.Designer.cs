@@ -66,6 +66,7 @@
             toolStripMenuItemMaximize = new ToolStripMenuItem();
             toolStripMenuItemStart = new ToolStripMenuItem();
             toolStripMenuItemStop = new ToolStripMenuItem();
+            richTextBoxLog = new RichTextBox();
             tabControlMain.SuspendLayout();
             tabPageControls.SuspendLayout();
             groupBoxControls.SuspendLayout();
@@ -414,16 +415,26 @@
             toolStripMenuItemStop.Text = "Stop monitoring";
             toolStripMenuItemStop.Click += ToolStripMenuItemStop_Click;
             // 
+            // richTextBoxLog
+            // 
+            richTextBoxLog.Location = new Point(12, 301);
+            richTextBoxLog.Name = "richTextBoxLog";
+            richTextBoxLog.ReadOnly = true;
+            richTextBoxLog.Size = new Size(706, 248);
+            richTextBoxLog.TabIndex = 1;
+            richTextBoxLog.Text = "";
+            // 
             // FormMain
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
-            ClientSize = new Size(734, 311);
+            ClientSize = new Size(734, 561);
+            Controls.Add(richTextBoxLog);
             Controls.Add(tabControlMain);
             Icon = (Icon)resources.GetObject("$this.Icon");
             MaximizeBox = false;
-            MaximumSize = new Size(750, 350);
-            MinimumSize = new Size(750, 350);
+            MaximumSize = new Size(750, 750);
+            MinimumSize = new Size(750, 600);
             Name = "FormMain";
             StartPosition = FormStartPosition.CenterScreen;
             Text = "NetPulseCheck";
@@ -478,5 +489,6 @@
         private ToolStripMenuItem toolStripMenuItemStart;
         private ToolStripMenuItem toolStripMenuItemStop;
         private ToolStripMenuItem toolStripMenuItemMaximize;
+        private RichTextBox richTextBoxLog;
     }
 }
