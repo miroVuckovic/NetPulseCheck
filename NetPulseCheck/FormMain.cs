@@ -1,4 +1,5 @@
 using System.ComponentModel;
+using System.Diagnostics;
 using System.Net.NetworkInformation;
 using System.Timers;
 using System.Windows.Forms;
@@ -15,10 +16,13 @@ namespace NetPulseCheck
             notifyIconMain.Visible = true;
             buttonStop.Enabled = false;
             comboBoxLogLevel.SelectedItem = "ERROR";
-            SetPingInterval();
+
             //SaveAllSettings();
             ReadAllSettings();
+            //SetPingInterval();
         }
+
+        Logger logger = new Logger();
 
         #region backgroundWorker
 
@@ -30,7 +34,7 @@ namespace NetPulseCheck
         private void bw_DoWork(object sender, DoWorkEventArgs e)
         {
             PingAllTargets();
-            Logger.WriteLog("Process started.");
+            logger.WriteLog("Process started.");
             if (bWorker.CancellationPending)
                 return;
             e.Cancel = true;
@@ -40,7 +44,7 @@ namespace NetPulseCheck
         {
             if (!e.Cancelled)
                 return;
-            Logger.WriteLog("Process stopped.");
+            logger.WriteLog("Process stopped.");
         }
 
         #endregion
@@ -163,22 +167,22 @@ namespace NetPulseCheck
                 switch (pingReply.Status)
                 {
                     case IPStatus.DestinationHostUnreachable:
-                        Logger.WriteLog(logTextFail);
+                        logger.WriteLog(logTextFail);
                         //richTextBoxLog.AppendText(logTextFail);
                         //DisplayNotification(Application.ProductName, "Destination host unreachable", 2000, true);
                         return "Destination host unreachable";
                     case IPStatus.DestinationUnreachable:
-                        Logger.WriteLog(logTextFail);
+                        logger.WriteLog(logTextFail);
                         //richTextBoxLog.AppendText(logTextFail);
                         //DisplayNotification(Application.ProductName, "Destination unreachable", 2000, true);
                         return "Destination unreachable";
                     case IPStatus.TimedOut:
-                        Logger.WriteLog(logTextFail);
+                        logger.WriteLog(logTextFail);
                         //richTextBoxLog.AppendText(logTextFail);
                         //DisplayNotification(Application.ProductName, "Destination timed out", 2000, true);
                         return "Destination timed out";
                     default:
-                        Logger.WriteLog(logTextSuccess);
+                        logger.WriteLog(logTextSuccess);
                         //richTextBoxLog.AppendText(logTextSuccess);
                         //DisplayNotification(Application.ProductName, "Destination success", 2000, true);
                         return "" + pingReply.RoundtripTime;
@@ -186,7 +190,7 @@ namespace NetPulseCheck
             }
             catch
             {
-                Logger.WriteLog(logTextFail);
+                logger.WriteLog(logTextFail);
                 richTextBoxLog.AppendText(logTextFail);
                 //DisplayNotification(Application.ProductName, "Destination exception", 2000, true);
                 while (pingReply.Status == IPStatus.DestinationHostUnreachable)
@@ -207,7 +211,7 @@ namespace NetPulseCheck
 
         private void SetPingInterval()
         {
-            double interval = Convert.ToDouble(textBoxInterval.Text);
+            double interval = Convert.ToDouble(numericUpDownInterval.Value.ToString());
 
             pingInterval = interval;
         }
@@ -236,17 +240,17 @@ namespace NetPulseCheck
 
         #endregion
 
-        private void DisplayNotification(string balloonTipTitle, string balloonTipText, int timeframe)
-        {
-            string str = string.Format("{0:yyyy-MM-dd HH:mm:ss}", (object)DateTime.Now);
-            if (labelTargetPing01.Text == MsgStrings(0) && labelTargetPing02.Text == MsgStrings(0) && labelTargetPing03.Text == MsgStrings(0))
-                Logger.WriteFailLog(MsgStrings(0));
-            if (File.Exists(Logger.failLogFullPath))
-                return;
-            notifyIconMain.BalloonTipTitle = balloonTipTitle;
-            notifyIconMain.BalloonTipText = balloonTipText + " " + str;
-            notifyIconMain.ShowBalloonTip(timeframe);
-        }
+        //private void DisplayNotification(string balloonTipTitle, string balloonTipText, int timeframe)
+        //{
+        //    string str = string.Format("{0:yyyy-MM-dd HH:mm:ss}", (object)DateTime.Now);
+        //    if (labelTargetPing01.Text == MsgStrings(0) && labelTargetPing02.Text == MsgStrings(0) && labelTargetPing03.Text == MsgStrings(0))
+        //        Logger.WriteFailLog(MsgStrings(0));
+        //    if (File.Exists(Logger.failLogFullPath))
+        //        return;
+        //    notifyIconMain.BalloonTipTitle = balloonTipTitle;
+        //    notifyIconMain.BalloonTipText = balloonTipText + " " + str;
+        //    notifyIconMain.ShowBalloonTip(timeframe);
+        //}
 
         #region Selection
 
@@ -312,7 +316,7 @@ namespace NetPulseCheck
 
         private void ButtonStart_Click(object sender, EventArgs e)
         {
-            StartMonitoring();        
+            StartMonitoring();
 
         }
 
@@ -324,11 +328,18 @@ namespace NetPulseCheck
                 return;
             }
 
+            logger.fileNameMainLog = string.Format("{0:yyyy-MM-dd_HH_mm_ss}", DateTime.Now) + ".txt";
+
+            SetPingInterval();
+
             SetPingTimer(pingInterval);
+
             bWorker.RunWorkerAsync();
 
-            richTextBoxLog.AppendText("Monitoring started.\n");
-            Logger.WriteLog("Monitoring started.");
+            string startText = String.Format("Monitoring started with interval of {0}ms.", pingInterval.ToString());
+
+            richTextBoxLog.AppendText(startText + " Logging to " + logger.fileNameMainLog + "\n");
+            logger.WriteLog(startText);
 
             buttonStart.Enabled = false;
             buttonStop.Enabled = true;
@@ -354,11 +365,12 @@ namespace NetPulseCheck
             SetControls(true);
 
             richTextBoxLog.AppendText("Monitoring stopped.\n");
-            Logger.WriteLog("Monitoring stopped.");
+            logger.WriteLog("Monitoring stopped.");
 
             labelTargetPing01.Text = "-";
             labelTargetPing02.Text = "-";
             labelTargetPing03.Text = "-";
+
         }
 
         private void SetControls(bool state)
@@ -373,7 +385,7 @@ namespace NetPulseCheck
             textBoxTargetDesc02.Enabled = state;
             textBoxTargetDesc03.Enabled = state;
             checkBoxTargetsAll.Enabled = state;
-            textBoxInterval.Enabled = state;
+            numericUpDownInterval.Enabled = state;
         }
 
         private void ButtonSetLogDir_Click(object sender, EventArgs e)
@@ -420,7 +432,7 @@ namespace NetPulseCheck
             SaveSetting("textBoxTargetDesc02", textBoxTargetDesc02.Text);
             SaveSetting("textBoxTargetDesc03", textBoxTargetDesc03.Text);
 
-            SaveSetting("textBoxInterval", textBoxInterval.Text);
+            SaveSetting("textBoxInterval", numericUpDownInterval.Text);
 
             SaveSetting("textBoxLogPath", textBoxLogPath.Text);
 
@@ -441,7 +453,7 @@ namespace NetPulseCheck
             textBoxTargetDesc02.Text = ReadSetting("textBoxTargetDesc02");
             textBoxTargetDesc03.Text = ReadSetting("textBoxTargetDesc03");
 
-            textBoxInterval.Text = ReadSetting("textBoxInterval");
+            numericUpDownInterval.Text = ReadSetting("textBoxInterval");
 
             string logPath = ReadSetting("textBoxLogPath");
 
@@ -495,6 +507,18 @@ namespace NetPulseCheck
             Show();
             Focus();
             notifyIconMain.Visible = false;
+        }
+
+        private void ButtonOpenLogDir_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                Process.Start("explorer.exe", Globals.logPath);
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Unable to open log directory.\n\n" + ex.Message, Application.ProductName + "- ERROR");
+            }
         }
     }
 }

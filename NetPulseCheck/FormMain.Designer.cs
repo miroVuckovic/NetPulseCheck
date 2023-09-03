@@ -33,8 +33,9 @@
             tabControlMain = new TabControl();
             tabPageControls = new TabPage();
             groupBoxControls = new GroupBox();
+            numericUpDownInterval = new NumericUpDown();
+            buttonOpenLogDir = new Button();
             labelInterval = new Label();
-            textBoxInterval = new TextBox();
             buttonStop = new Button();
             buttonStart = new Button();
             labelTargetPing03 = new Label();
@@ -70,6 +71,7 @@
             tabControlMain.SuspendLayout();
             tabPageControls.SuspendLayout();
             groupBoxControls.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)numericUpDownInterval).BeginInit();
             tabPageOptions.SuspendLayout();
             groupBoxLogging.SuspendLayout();
             contextMenuStripMain.SuspendLayout();
@@ -82,24 +84,26 @@
             tabControlMain.Location = new Point(12, 12);
             tabControlMain.Name = "tabControlMain";
             tabControlMain.SelectedIndex = 0;
-            tabControlMain.Size = new Size(710, 287);
+            tabControlMain.Size = new Size(710, 548);
             tabControlMain.TabIndex = 0;
             // 
             // tabPageControls
             // 
             tabPageControls.Controls.Add(groupBoxControls);
+            tabPageControls.Controls.Add(richTextBoxLog);
             tabPageControls.Location = new Point(4, 24);
             tabPageControls.Name = "tabPageControls";
             tabPageControls.Padding = new Padding(3);
-            tabPageControls.Size = new Size(702, 259);
+            tabPageControls.Size = new Size(702, 520);
             tabPageControls.TabIndex = 0;
             tabPageControls.Text = "Controls";
             tabPageControls.UseVisualStyleBackColor = true;
             // 
             // groupBoxControls
             // 
+            groupBoxControls.Controls.Add(numericUpDownInterval);
+            groupBoxControls.Controls.Add(buttonOpenLogDir);
             groupBoxControls.Controls.Add(labelInterval);
-            groupBoxControls.Controls.Add(textBoxInterval);
             groupBoxControls.Controls.Add(buttonStop);
             groupBoxControls.Controls.Add(buttonStart);
             groupBoxControls.Controls.Add(labelTargetPing03);
@@ -124,6 +128,28 @@
             groupBoxControls.TabIndex = 0;
             groupBoxControls.TabStop = false;
             // 
+            // numericUpDownInterval
+            // 
+            numericUpDownInterval.Increment = new decimal(new int[] { 500, 0, 0, 0 });
+            numericUpDownInterval.Location = new Point(334, 154);
+            numericUpDownInterval.Maximum = new decimal(new int[] { 60000, 0, 0, 0 });
+            numericUpDownInterval.Minimum = new decimal(new int[] { 5000, 0, 0, 0 });
+            numericUpDownInterval.Name = "numericUpDownInterval";
+            numericUpDownInterval.Size = new Size(120, 23);
+            numericUpDownInterval.TabIndex = 10;
+            numericUpDownInterval.TextAlign = HorizontalAlignment.Right;
+            numericUpDownInterval.Value = new decimal(new int[] { 5000, 0, 0, 0 });
+            // 
+            // buttonOpenLogDir
+            // 
+            buttonOpenLogDir.Location = new Point(613, 186);
+            buttonOpenLogDir.Name = "buttonOpenLogDir";
+            buttonOpenLogDir.Size = new Size(71, 55);
+            buttonOpenLogDir.TabIndex = 9;
+            buttonOpenLogDir.Text = "Open log folder";
+            buttonOpenLogDir.UseVisualStyleBackColor = true;
+            buttonOpenLogDir.Click += ButtonOpenLogDir_Click;
+            // 
             // labelInterval
             // 
             labelInterval.AutoSize = true;
@@ -133,20 +159,11 @@
             labelInterval.TabIndex = 8;
             labelInterval.Text = "Request interval (ms):";
             // 
-            // textBoxInterval
-            // 
-            textBoxInterval.Location = new Point(334, 151);
-            textBoxInterval.Name = "textBoxInterval";
-            textBoxInterval.Size = new Size(116, 23);
-            textBoxInterval.TabIndex = 7;
-            textBoxInterval.Text = "5000";
-            textBoxInterval.TextAlign = HorizontalAlignment.Right;
-            // 
             // buttonStop
             // 
             buttonStop.Location = new Point(6, 186);
             buttonStop.Name = "buttonStop";
-            buttonStop.Size = new Size(678, 23);
+            buttonStop.Size = new Size(601, 23);
             buttonStop.TabIndex = 6;
             buttonStop.Text = "Stop";
             buttonStop.UseVisualStyleBackColor = true;
@@ -157,7 +174,7 @@
             buttonStart.Font = new Font("Segoe UI", 9F, FontStyle.Bold, GraphicsUnit.Point);
             buttonStart.Location = new Point(6, 211);
             buttonStart.Name = "buttonStart";
-            buttonStart.Size = new Size(678, 30);
+            buttonStart.Size = new Size(601, 30);
             buttonStart.TabIndex = 5;
             buttonStart.Text = "Start";
             buttonStart.UseVisualStyleBackColor = true;
@@ -307,7 +324,7 @@
             tabPageOptions.Location = new Point(4, 24);
             tabPageOptions.Name = "tabPageOptions";
             tabPageOptions.Padding = new Padding(3);
-            tabPageOptions.Size = new Size(702, 259);
+            tabPageOptions.Size = new Size(702, 520);
             tabPageOptions.TabIndex = 1;
             tabPageOptions.Text = "Options";
             tabPageOptions.UseVisualStyleBackColor = true;
@@ -417,10 +434,10 @@
             // 
             // richTextBoxLog
             // 
-            richTextBoxLog.Location = new Point(12, 301);
+            richTextBoxLog.Location = new Point(6, 259);
             richTextBoxLog.Name = "richTextBoxLog";
             richTextBoxLog.ReadOnly = true;
-            richTextBoxLog.Size = new Size(706, 248);
+            richTextBoxLog.Size = new Size(690, 255);
             richTextBoxLog.TabIndex = 1;
             richTextBoxLog.Text = "";
             // 
@@ -429,7 +446,6 @@
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
             ClientSize = new Size(734, 561);
-            Controls.Add(richTextBoxLog);
             Controls.Add(tabControlMain);
             Icon = (Icon)resources.GetObject("$this.Icon");
             MaximizeBox = false;
@@ -444,6 +460,7 @@
             tabPageControls.ResumeLayout(false);
             groupBoxControls.ResumeLayout(false);
             groupBoxControls.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)numericUpDownInterval).EndInit();
             tabPageOptions.ResumeLayout(false);
             groupBoxLogging.ResumeLayout(false);
             groupBoxLogging.PerformLayout();
@@ -481,7 +498,6 @@
         private Button buttonSetLogDir;
         private ComboBox comboBoxLogLevel;
         private Label label1;
-        private TextBox textBoxInterval;
         private Label labelInterval;
         private GroupBox groupBoxLogging;
         private GroupBox groupBoxOptionsApp;
@@ -490,5 +506,7 @@
         private ToolStripMenuItem toolStripMenuItemStop;
         private ToolStripMenuItem toolStripMenuItemMaximize;
         private RichTextBox richTextBoxLog;
+        private Button buttonOpenLogDir;
+        private NumericUpDown numericUpDownInterval;
     }
 }

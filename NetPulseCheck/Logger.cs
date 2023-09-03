@@ -8,17 +8,25 @@ namespace NetPulseCheck
 {
     internal class Logger
     {
-        public static string tempDirFailLog = "NetPulseCheck_Fail";
-        public static string logPathFailLog = Environment.GetEnvironmentVariable("TEMP", EnvironmentVariableTarget.User) + "\\" + Logger.tempDirFailLog;
-        public static string fileNameFailLog = string.Format("{0:yyyy-MM-dd}", DateTime.Now) + ".txt";
-        public static string failLogFullPath = Path.Combine(Logger.logPathFailLog, Logger.fileNameFailLog);
+        public string fileNameMainLog;
 
-        public static void WriteLog(string inputText)
+        private static string tempDirFailLog = "NetPulseCheck_Fail";
+        private static string logPathFailLog = Environment.GetEnvironmentVariable("TEMP", EnvironmentVariableTarget.User) + "\\" + Logger.tempDirFailLog;
+        private static string fileNameFailLog = string.Format("{0:yyyy-MM-dd}", DateTime.Now) + ".txt";      
+        private static string failLogFullPath = Path.Combine(Logger.logPathFailLog, Logger.fileNameFailLog);
+
+        public Logger(string fileName = "log.txt")
+        {
+            WriteLog(fileNameMainLog);
+            fileNameMainLog = fileName;
+        }
+
+        public void WriteLog(string inputText)
         {
             string path1 = Globals.logPath != null ? Globals.logPath : Environment.GetFolderPath(Environment.SpecialFolder.Desktop);
             try
             {
-                using (StreamWriter streamWriter = new StreamWriter(Path.Combine(path1, "netlog.txt"), true))
+                using (StreamWriter streamWriter = new StreamWriter(Path.Combine(path1, fileNameMainLog), true))
                     streamWriter.WriteLine("{0:yyyy-MM-dd HH:mm:ss} - " + inputText, DateTime.Now);
             }
             catch
@@ -26,7 +34,7 @@ namespace NetPulseCheck
             }
         }
 
-        public static void WriteFailLog(string inputText)
+        private void WriteFailLog(string inputText)
         {
             if (!Directory.Exists(Logger.logPathFailLog))
                 Directory.CreateDirectory(Logger.logPathFailLog);
