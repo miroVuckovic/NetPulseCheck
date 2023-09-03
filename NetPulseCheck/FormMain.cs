@@ -16,6 +16,7 @@ namespace NetPulseCheck
             notifyIconMain.Visible = true;
             buttonStop.Enabled = false;
             comboBoxLogLevel.SelectedItem = "ERROR";
+            comboBoxCSVSeparator.SelectedItem = ";";
 
             //SaveAllSettings();
             ReadAllSettings();
@@ -158,31 +159,35 @@ namespace NetPulseCheck
 
             PingReply pingReply = ping.Send(hostname, timeout);
 
+            char separator = GetCSVSeparator();
+
             string logTextSuccess = hostname + " = " + pingReply.RoundtripTime + " ms" + " - (" + dnsName + ")";
             string logTextFail = MsgStrings(0) + " " + hostname + " (" + dnsName + ")";
-            string notifTextFail = "Connection fail detected" + " for" + hostname + " (" + dnsName + ")";
+            //string notifTextFail = "Connection fail detected" + " for" + hostname + " (" + dnsName + ")";
+
+            string logText = hostname + separator + pingReply.RoundtripTime + " ms" + " - (" + dnsName + ")";
 
             try
             {
                 switch (pingReply.Status)
                 {
                     case IPStatus.DestinationHostUnreachable:
-                        logger.WriteLog(logTextFail);
+                        logger.WriteLog("Destination host unreachable" + separator + logText);
                         //richTextBoxLog.AppendText(logTextFail);
                         //DisplayNotification(Application.ProductName, "Destination host unreachable", 2000, true);
                         return "Destination host unreachable";
                     case IPStatus.DestinationUnreachable:
-                        logger.WriteLog(logTextFail);
+                        logger.WriteLog("Destination unreachable" + separator + logText);
                         //richTextBoxLog.AppendText(logTextFail);
                         //DisplayNotification(Application.ProductName, "Destination unreachable", 2000, true);
                         return "Destination unreachable";
                     case IPStatus.TimedOut:
-                        logger.WriteLog(logTextFail);
+                        logger.WriteLog("Destination timed out" + separator + logText);
                         //richTextBoxLog.AppendText(logTextFail);
                         //DisplayNotification(Application.ProductName, "Destination timed out", 2000, true);
                         return "Destination timed out";
                     default:
-                        logger.WriteLog(logTextSuccess);
+                        logger.WriteLog(logText);
                         //richTextBoxLog.AppendText(logTextSuccess);
                         //DisplayNotification(Application.ProductName, "Destination success", 2000, true);
                         return "" + pingReply.RoundtripTime;
@@ -190,8 +195,8 @@ namespace NetPulseCheck
             }
             catch
             {
-                logger.WriteLog(logTextFail);
-                richTextBoxLog.AppendText(logTextFail);
+                logger.WriteLog(logText);
+                richTextBoxLog.AppendText(logText);
                 //DisplayNotification(Application.ProductName, "Destination exception", 2000, true);
                 while (pingReply.Status == IPStatus.DestinationHostUnreachable)
                 {
@@ -328,7 +333,8 @@ namespace NetPulseCheck
                 return;
             }
 
-            logger.fileNameMainLog = string.Format("{0:yyyy-MM-dd_HH_mm_ss}", DateTime.Now) + ".txt";
+            logger.fileNameMainLog = string.Format("{0:yyyy-MM-dd_HH_mm_ss}", DateTime.Now) + ".csv";
+            logger.separator = GetCSVSeparator();
 
             SetPingInterval();
 
@@ -437,6 +443,8 @@ namespace NetPulseCheck
             SaveSetting("textBoxLogPath", textBoxLogPath.Text);
 
             SaveSetting("comboBoxLogLevel", comboBoxLogLevel.Text);
+
+            SaveSetting("comboBoxCSVSeparator", comboBoxCSVSeparator.Text);
         }
 
         private void ReadAllSettings()
@@ -461,6 +469,7 @@ namespace NetPulseCheck
             Globals.logPath = logPath;
 
             comboBoxLogLevel.SelectedItem = ReadSetting("comboBoxLogLevel");
+            comboBoxCSVSeparator.SelectedItem = ReadSetting("comboBoxCSVSeparator");
         }
 
         #endregion
@@ -519,6 +528,22 @@ namespace NetPulseCheck
             {
                 MessageBox.Show("Unable to open log directory.\n\n" + ex.Message, Application.ProductName + "- ERROR");
             }
+        }
+
+        private char GetCSVSeparator()
+        {
+            char csvSeparator;
+
+            if (comboBoxCSVSeparator.Text == "Tab")
+            {
+                csvSeparator = '\t';
+            }
+            else
+            {
+                csvSeparator = Convert.ToChar(comboBoxCSVSeparator.SelectedItem);
+            }
+
+            return csvSeparator;
         }
     }
 }

@@ -54,9 +54,12 @@
             checkBoxActivate03 = new CheckBox();
             checkBoxActivate02 = new CheckBox();
             checkBoxActivate01 = new CheckBox();
+            richTextBoxLog = new RichTextBox();
             tabPageOptions = new TabPage();
             groupBoxOptionsApp = new GroupBox();
             groupBoxLogging = new GroupBox();
+            comboBoxCSVSeparator = new ComboBox();
+            labelCSVSeparator = new Label();
             labelLogDirPath = new Label();
             comboBoxLogLevel = new ComboBox();
             label1 = new Label();
@@ -67,7 +70,6 @@
             toolStripMenuItemMaximize = new ToolStripMenuItem();
             toolStripMenuItemStart = new ToolStripMenuItem();
             toolStripMenuItemStop = new ToolStripMenuItem();
-            richTextBoxLog = new RichTextBox();
             tabControlMain.SuspendLayout();
             tabPageControls.SuspendLayout();
             groupBoxControls.SuspendLayout();
@@ -317,6 +319,15 @@
             checkBoxActivate01.TabIndex = 0;
             checkBoxActivate01.UseVisualStyleBackColor = true;
             // 
+            // richTextBoxLog
+            // 
+            richTextBoxLog.Location = new Point(6, 259);
+            richTextBoxLog.Name = "richTextBoxLog";
+            richTextBoxLog.ReadOnly = true;
+            richTextBoxLog.Size = new Size(690, 255);
+            richTextBoxLog.TabIndex = 1;
+            richTextBoxLog.Text = "";
+            // 
             // tabPageOptions
             // 
             tabPageOptions.Controls.Add(groupBoxOptionsApp);
@@ -331,15 +342,17 @@
             // 
             // groupBoxOptionsApp
             // 
-            groupBoxOptionsApp.Location = new Point(6, 116);
+            groupBoxOptionsApp.Location = new Point(6, 163);
             groupBoxOptionsApp.Name = "groupBoxOptionsApp";
-            groupBoxOptionsApp.Size = new Size(690, 137);
+            groupBoxOptionsApp.Size = new Size(690, 350);
             groupBoxOptionsApp.TabIndex = 5;
             groupBoxOptionsApp.TabStop = false;
             groupBoxOptionsApp.Text = "Application";
             // 
             // groupBoxLogging
             // 
+            groupBoxLogging.Controls.Add(comboBoxCSVSeparator);
+            groupBoxLogging.Controls.Add(labelCSVSeparator);
             groupBoxLogging.Controls.Add(labelLogDirPath);
             groupBoxLogging.Controls.Add(comboBoxLogLevel);
             groupBoxLogging.Controls.Add(label1);
@@ -347,10 +360,29 @@
             groupBoxLogging.Controls.Add(textBoxLogPath);
             groupBoxLogging.Location = new Point(6, 6);
             groupBoxLogging.Name = "groupBoxLogging";
-            groupBoxLogging.Size = new Size(690, 104);
+            groupBoxLogging.Size = new Size(690, 151);
             groupBoxLogging.TabIndex = 4;
             groupBoxLogging.TabStop = false;
             groupBoxLogging.Text = "Logging";
+            // 
+            // comboBoxCSVSeparator
+            // 
+            comboBoxCSVSeparator.DropDownStyle = ComboBoxStyle.DropDownList;
+            comboBoxCSVSeparator.FormattingEnabled = true;
+            comboBoxCSVSeparator.Items.AddRange(new object[] { ";", ",", "Tab" });
+            comboBoxCSVSeparator.Location = new Point(121, 64);
+            comboBoxCSVSeparator.Name = "comboBoxCSVSeparator";
+            comboBoxCSVSeparator.Size = new Size(285, 23);
+            comboBoxCSVSeparator.TabIndex = 5;
+            // 
+            // labelCSVSeparator
+            // 
+            labelCSVSeparator.AutoSize = true;
+            labelCSVSeparator.Location = new Point(6, 67);
+            labelCSVSeparator.Name = "labelCSVSeparator";
+            labelCSVSeparator.Size = new Size(83, 15);
+            labelCSVSeparator.TabIndex = 4;
+            labelCSVSeparator.Text = "CSV separator:";
             // 
             // labelLogDirPath
             // 
@@ -366,7 +398,7 @@
             comboBoxLogLevel.DropDownStyle = ComboBoxStyle.DropDownList;
             comboBoxLogLevel.FormattingEnabled = true;
             comboBoxLogLevel.Items.AddRange(new object[] { "ERROR", "DEBUG", "TRACE" });
-            comboBoxLogLevel.Location = new Point(121, 62);
+            comboBoxLogLevel.Location = new Point(121, 103);
             comboBoxLogLevel.Name = "comboBoxLogLevel";
             comboBoxLogLevel.Size = new Size(285, 23);
             comboBoxLogLevel.TabIndex = 3;
@@ -374,7 +406,7 @@
             // label1
             // 
             label1.AutoSize = true;
-            label1.Location = new Point(6, 65);
+            label1.Location = new Point(6, 106);
             label1.Name = "label1";
             label1.Size = new Size(57, 15);
             label1.TabIndex = 0;
@@ -431,15 +463,6 @@
             toolStripMenuItemStop.Size = new Size(186, 22);
             toolStripMenuItemStop.Text = "Stop monitoring";
             toolStripMenuItemStop.Click += ToolStripMenuItemStop_Click;
-            // 
-            // richTextBoxLog
-            // 
-            richTextBoxLog.Location = new Point(6, 259);
-            richTextBoxLog.Name = "richTextBoxLog";
-            richTextBoxLog.ReadOnly = true;
-            richTextBoxLog.Size = new Size(690, 255);
-            richTextBoxLog.TabIndex = 1;
-            richTextBoxLog.Text = "";
             // 
             // FormMain
             // 
@@ -508,5 +531,7 @@
         private RichTextBox richTextBoxLog;
         private Button buttonOpenLogDir;
         private NumericUpDown numericUpDownInterval;
+        private Label labelCSVSeparator;
+        private ComboBox comboBoxCSVSeparator;
     }
 }

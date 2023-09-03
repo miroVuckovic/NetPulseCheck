@@ -9,16 +9,20 @@ namespace NetPulseCheck
     internal class Logger
     {
         public string fileNameMainLog;
+        public char separator;
 
         private static string tempDirFailLog = "NetPulseCheck_Fail";
         private static string logPathFailLog = Environment.GetEnvironmentVariable("TEMP", EnvironmentVariableTarget.User) + "\\" + Logger.tempDirFailLog;
-        private static string fileNameFailLog = string.Format("{0:yyyy-MM-dd}", DateTime.Now) + ".txt";      
+        private static string fileNameFailLog = string.Format("{0:yyyy-MM-dd}", DateTime.Now) + ".csv";      
         private static string failLogFullPath = Path.Combine(Logger.logPathFailLog, Logger.fileNameFailLog);
 
-        public Logger(string fileName = "log.txt")
+        string csvHeader = 
+
+        public Logger(string fileName = "log.csv", char separator = ';')
         {
             WriteLog(fileNameMainLog);
             fileNameMainLog = fileName;
+            this.separator = separator;
         }
 
         public void WriteLog(string inputText)
@@ -27,7 +31,7 @@ namespace NetPulseCheck
             try
             {
                 using (StreamWriter streamWriter = new StreamWriter(Path.Combine(path1, fileNameMainLog), true))
-                    streamWriter.WriteLine("{0:yyyy-MM-dd HH:mm:ss} - " + inputText, DateTime.Now);
+                    streamWriter.WriteLine("{0:yyyy-MM-dd HH:mm:ss}"+ separator + inputText, DateTime.Now);
             }
             catch
             {
