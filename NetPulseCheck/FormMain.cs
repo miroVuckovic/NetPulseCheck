@@ -14,14 +14,17 @@ namespace NetPulseCheck
             HandleDefaultGui();
             AutoFillDefaultTargets();
             notifyIconMain.Visible = true;
-            buttonStop.Enabled = false;
             comboBoxLogLevel.SelectedItem = "ERROR";
             comboBoxCSVSeparator.SelectedItem = ";";
 
             //SaveAllSettings();
             ReadAllSettings();
             //SetPingInterval();
+
+            SetControls(true);
         }
+
+        int monitoringState = 0;
 
         Logger logger = new Logger();
 
@@ -93,13 +96,11 @@ namespace NetPulseCheck
 
         #region ping
 
-        //static int interval = (int)textBoxInterval.Text;
-
         public void PingAllTargets()
         {
-            PingTarget01(textBoxTargetIp01.Text, Convert.ToInt32(pingInterval));
-            PingTarget02(textBoxTargetIp02.Text, Convert.ToInt32(pingInterval));
-            PingTarget03(textBoxTargetIp03.Text, Convert.ToInt32(pingInterval));
+            PingTarget01(textBoxTargetIp01.Text, Convert.ToInt32(pingTimeout));
+            PingTarget02(textBoxTargetIp02.Text, Convert.ToInt32(pingTimeout));
+            PingTarget03(textBoxTargetIp03.Text, Convert.ToInt32(pingTimeout));
         }
 
         public void PingTarget01(string hostname, int time)
@@ -116,6 +117,7 @@ namespace NetPulseCheck
             }
             catch (Exception ex)
             {
+                logger.WriteLog(ex.Message);
             }
         }
 
@@ -159,7 +161,7 @@ namespace NetPulseCheck
 
             PingReply pingReply = ping.Send(hostname, timeout);
 
-            char separator = GetCSVSeparator();
+            char separator = ';';
 
             string logTextSuccess = hostname + " = " + pingReply.RoundtripTime + " ms" + " - (" + dnsName + ")";
             string logTextFail = MsgStrings(0) + " " + hostname + " (" + dnsName + ")";
@@ -212,7 +214,8 @@ namespace NetPulseCheck
 
         System.Timers.Timer pingTimer = new System.Timers.Timer();
 
-        private double pingInterval;
+        private static double pingInterval;
+        private int pingTimeout = Convert.ToInt32(pingInterval) - 500;
 
         private void SetPingInterval()
         {
@@ -334,7 +337,7 @@ namespace NetPulseCheck
             }
 
             logger.fileNameMainLog = string.Format("{0:yyyy-MM-dd_HH_mm_ss}", DateTime.Now) + ".csv";
-            logger.separator = GetCSVSeparator();
+            logger.separator = ';';
 
             SetPingInterval();
 
@@ -353,6 +356,8 @@ namespace NetPulseCheck
             SetControls(false);
 
             SaveAllSettings();
+
+            monitoringState = 1;
         }
 
         private void ButtonStop_Click(object sender, EventArgs e)
@@ -377,10 +382,12 @@ namespace NetPulseCheck
             labelTargetPing02.Text = "-";
             labelTargetPing03.Text = "-";
 
+            monitoringState = 0;
         }
 
         private void SetControls(bool state)
         {
+            buttonStop.Enabled = !state;
             checkBoxActivate01.Enabled = state;
             checkBoxActivate02.Enabled = state;
             checkBoxActivate03.Enabled = state;
@@ -392,6 +399,8 @@ namespace NetPulseCheck
             textBoxTargetDesc03.Enabled = state;
             checkBoxTargetsAll.Enabled = state;
             numericUpDownInterval.Enabled = state;
+            toolStripMenuItemStart.Enabled = state;
+            toolStripMenuItemStop.Enabled = !state;
         }
 
         private void ButtonSetLogDir_Click(object sender, EventArgs e)
@@ -444,7 +453,7 @@ namespace NetPulseCheck
 
             SaveSetting("comboBoxLogLevel", comboBoxLogLevel.Text);
 
-            SaveSetting("comboBoxCSVSeparator", comboBoxCSVSeparator.Text);
+            //SaveSetting("comboBoxCSVSeparator", comboBoxCSVSeparator.Text);
         }
 
         private void ReadAllSettings()
@@ -469,7 +478,7 @@ namespace NetPulseCheck
             Globals.logPath = logPath;
 
             comboBoxLogLevel.SelectedItem = ReadSetting("comboBoxLogLevel");
-            comboBoxCSVSeparator.SelectedItem = ReadSetting("comboBoxCSVSeparator");
+            //comboBoxCSVSeparator.SelectedItem = ReadSetting("comboBoxCSVSeparator");
         }
 
         #endregion
@@ -544,6 +553,27 @@ namespace NetPulseCheck
             }
 
             return csvSeparator;
+        }
+
+        private void ToolStripMenuItemExit_Click(object sender, EventArgs e)
+        {
+            var dialogResult = MessageBox.Show("Are you sure you want to exit?", Application.ProductName + " - " + "Question", MessageBoxButtons.YesNo);
+
+            if (dialogResult == DialogResult.Yes)
+            {
+                ExitApplication();
+            }
+
+        }
+
+        private void ExitApplication()
+        {
+            if (monitoringState == 1)
+            {
+                StopMonitoring();
+            }
+
+            Application.Exit();
         }
     }
 }

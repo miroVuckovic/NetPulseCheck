@@ -57,6 +57,9 @@
             richTextBoxLog = new RichTextBox();
             tabPageOptions = new TabPage();
             groupBoxOptionsApp = new GroupBox();
+            checkBoxStartMini = new CheckBox();
+            checkBoxMonitorStart = new CheckBox();
+            checkBoxStartWin = new CheckBox();
             groupBoxLogging = new GroupBox();
             comboBoxCSVSeparator = new ComboBox();
             labelCSVSeparator = new Label();
@@ -68,13 +71,17 @@
             notifyIconMain = new NotifyIcon(components);
             contextMenuStripMain = new ContextMenuStrip(components);
             toolStripMenuItemMaximize = new ToolStripMenuItem();
+            toolStripSeparator2 = new ToolStripSeparator();
             toolStripMenuItemStart = new ToolStripMenuItem();
             toolStripMenuItemStop = new ToolStripMenuItem();
+            toolStripSeparator1 = new ToolStripSeparator();
+            toolStripMenuItemExit = new ToolStripMenuItem();
             tabControlMain.SuspendLayout();
             tabPageControls.SuspendLayout();
             groupBoxControls.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)numericUpDownInterval).BeginInit();
             tabPageOptions.SuspendLayout();
+            groupBoxOptionsApp.SuspendLayout();
             groupBoxLogging.SuspendLayout();
             contextMenuStripMain.SuspendLayout();
             SuspendLayout();
@@ -342,12 +349,45 @@
             // 
             // groupBoxOptionsApp
             // 
+            groupBoxOptionsApp.Controls.Add(checkBoxStartMini);
+            groupBoxOptionsApp.Controls.Add(checkBoxMonitorStart);
+            groupBoxOptionsApp.Controls.Add(checkBoxStartWin);
             groupBoxOptionsApp.Location = new Point(6, 163);
             groupBoxOptionsApp.Name = "groupBoxOptionsApp";
             groupBoxOptionsApp.Size = new Size(690, 350);
             groupBoxOptionsApp.TabIndex = 5;
             groupBoxOptionsApp.TabStop = false;
             groupBoxOptionsApp.Text = "Application";
+            // 
+            // checkBoxStartMini
+            // 
+            checkBoxStartMini.AutoSize = true;
+            checkBoxStartMini.Location = new Point(22, 95);
+            checkBoxStartMini.Name = "checkBoxStartMini";
+            checkBoxStartMini.Size = new Size(86, 19);
+            checkBoxStartMini.TabIndex = 2;
+            checkBoxStartMini.Text = "Start in tray";
+            checkBoxStartMini.UseVisualStyleBackColor = true;
+            // 
+            // checkBoxMonitorStart
+            // 
+            checkBoxMonitorStart.AutoSize = true;
+            checkBoxMonitorStart.Location = new Point(22, 70);
+            checkBoxMonitorStart.Name = "checkBoxMonitorStart";
+            checkBoxMonitorStart.Size = new Size(170, 19);
+            checkBoxMonitorStart.TabIndex = 1;
+            checkBoxMonitorStart.Text = "Start monitoring on startup";
+            checkBoxMonitorStart.UseVisualStyleBackColor = true;
+            // 
+            // checkBoxStartWin
+            // 
+            checkBoxStartWin.AutoSize = true;
+            checkBoxStartWin.Location = new Point(22, 45);
+            checkBoxStartWin.Name = "checkBoxStartWin";
+            checkBoxStartWin.Size = new Size(128, 19);
+            checkBoxStartWin.TabIndex = 0;
+            checkBoxStartWin.Text = "Start with Windows";
+            checkBoxStartWin.UseVisualStyleBackColor = true;
             // 
             // groupBoxLogging
             // 
@@ -370,19 +410,21 @@
             comboBoxCSVSeparator.DropDownStyle = ComboBoxStyle.DropDownList;
             comboBoxCSVSeparator.FormattingEnabled = true;
             comboBoxCSVSeparator.Items.AddRange(new object[] { ";", ",", "Tab" });
-            comboBoxCSVSeparator.Location = new Point(121, 64);
+            comboBoxCSVSeparator.Location = new Point(121, 109);
             comboBoxCSVSeparator.Name = "comboBoxCSVSeparator";
             comboBoxCSVSeparator.Size = new Size(285, 23);
             comboBoxCSVSeparator.TabIndex = 5;
+            comboBoxCSVSeparator.Visible = false;
             // 
             // labelCSVSeparator
             // 
             labelCSVSeparator.AutoSize = true;
-            labelCSVSeparator.Location = new Point(6, 67);
+            labelCSVSeparator.Location = new Point(6, 112);
             labelCSVSeparator.Name = "labelCSVSeparator";
             labelCSVSeparator.Size = new Size(83, 15);
             labelCSVSeparator.TabIndex = 4;
             labelCSVSeparator.Text = "CSV separator:";
+            labelCSVSeparator.Visible = false;
             // 
             // labelLogDirPath
             // 
@@ -398,7 +440,7 @@
             comboBoxLogLevel.DropDownStyle = ComboBoxStyle.DropDownList;
             comboBoxLogLevel.FormattingEnabled = true;
             comboBoxLogLevel.Items.AddRange(new object[] { "ERROR", "DEBUG", "TRACE" });
-            comboBoxLogLevel.Location = new Point(121, 103);
+            comboBoxLogLevel.Location = new Point(121, 63);
             comboBoxLogLevel.Name = "comboBoxLogLevel";
             comboBoxLogLevel.Size = new Size(285, 23);
             comboBoxLogLevel.TabIndex = 3;
@@ -406,7 +448,7 @@
             // label1
             // 
             label1.AutoSize = true;
-            label1.Location = new Point(6, 106);
+            label1.Location = new Point(6, 66);
             label1.Name = "label1";
             label1.Size = new Size(57, 15);
             label1.TabIndex = 0;
@@ -439,9 +481,9 @@
             // 
             // contextMenuStripMain
             // 
-            contextMenuStripMain.Items.AddRange(new ToolStripItem[] { toolStripMenuItemMaximize, toolStripMenuItemStart, toolStripMenuItemStop });
+            contextMenuStripMain.Items.AddRange(new ToolStripItem[] { toolStripMenuItemMaximize, toolStripSeparator2, toolStripMenuItemStart, toolStripMenuItemStop, toolStripSeparator1, toolStripMenuItemExit });
             contextMenuStripMain.Name = "contextMenuStripMain";
-            contextMenuStripMain.Size = new Size(187, 70);
+            contextMenuStripMain.Size = new Size(187, 104);
             // 
             // toolStripMenuItemMaximize
             // 
@@ -449,6 +491,11 @@
             toolStripMenuItemMaximize.Size = new Size(186, 22);
             toolStripMenuItemMaximize.Text = "Open NetPulseCheck";
             toolStripMenuItemMaximize.Click += ToolStripMenuItemMaximize_Click;
+            // 
+            // toolStripSeparator2
+            // 
+            toolStripSeparator2.Name = "toolStripSeparator2";
+            toolStripSeparator2.Size = new Size(183, 6);
             // 
             // toolStripMenuItemStart
             // 
@@ -463,6 +510,18 @@
             toolStripMenuItemStop.Size = new Size(186, 22);
             toolStripMenuItemStop.Text = "Stop monitoring";
             toolStripMenuItemStop.Click += ToolStripMenuItemStop_Click;
+            // 
+            // toolStripSeparator1
+            // 
+            toolStripSeparator1.Name = "toolStripSeparator1";
+            toolStripSeparator1.Size = new Size(183, 6);
+            // 
+            // toolStripMenuItemExit
+            // 
+            toolStripMenuItemExit.Name = "toolStripMenuItemExit";
+            toolStripMenuItemExit.Size = new Size(186, 22);
+            toolStripMenuItemExit.Text = "Exit application";
+            toolStripMenuItemExit.Click += ToolStripMenuItemExit_Click;
             // 
             // FormMain
             // 
@@ -485,6 +544,8 @@
             groupBoxControls.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)numericUpDownInterval).EndInit();
             tabPageOptions.ResumeLayout(false);
+            groupBoxOptionsApp.ResumeLayout(false);
+            groupBoxOptionsApp.PerformLayout();
             groupBoxLogging.ResumeLayout(false);
             groupBoxLogging.PerformLayout();
             contextMenuStripMain.ResumeLayout(false);
@@ -533,5 +594,11 @@
         private NumericUpDown numericUpDownInterval;
         private Label labelCSVSeparator;
         private ComboBox comboBoxCSVSeparator;
+        private CheckBox checkBoxStartWin;
+        private CheckBox checkBoxMonitorStart;
+        private CheckBox checkBoxStartMini;
+        private ToolStripMenuItem toolStripMenuItemExit;
+        private ToolStripSeparator toolStripSeparator2;
+        private ToolStripSeparator toolStripSeparator1;
     }
 }
