@@ -30,7 +30,7 @@ namespace NetPulseCheck
 
             char separator = ';';
 
-            string logText = hostname + separator + pingReply.RoundtripTime + " ms" + separator +  "(" + dnsName + ")";
+            string logText = hostname + separator + pingReply.RoundtripTime + separator +  "(" + dnsName + ")";
 
             try
             {

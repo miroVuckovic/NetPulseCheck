@@ -154,7 +154,7 @@ namespace NetPulseCheck
 
             char separator = ';';
 
-            logger.WriteLog(returnValue + " ms" + separator  + hostname + separator + dnsName + separator);
+            logger.WriteLog(returnValue + separator  + hostname + separator + dnsName + separator);
 
             return returnValue;
 
@@ -164,7 +164,7 @@ namespace NetPulseCheck
         {
             char separator = ';';
 
-            logger.WriteLog("Time" + separator + "Ping" + separator + "IP/DNS" + separator + "Target description" + separator,1);
+            logger.WriteLog("Time" + separator + "Ping (ms)" + separator + "IP/DNS" + separator + "Target description" + separator,1);
         }
 
         #endregion
