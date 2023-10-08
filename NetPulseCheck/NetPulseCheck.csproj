@@ -7,6 +7,7 @@
     <UseWindowsForms>true</UseWindowsForms>
     <ImplicitUsings>enable</ImplicitUsings>
     <ApplicationIcon>Resources\life_32x32.ico</ApplicationIcon>
+    <PackageProjectUrl>https://github.com/miroVuckovic/NetPulseCheck</PackageProjectUrl>
   </PropertyGroup>
 
   <ItemGroup>

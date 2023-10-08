@@ -53,21 +53,6 @@ namespace NetPulseCheck
 
         #endregion
 
-        #region Messages
-        private string MsgStrings(int status)
-        {
-            switch (status)
-            {
-                case 0:
-                    return "Host unreachable";
-                case 1:
-                    return "Connection OK";
-                default:
-                    return "Connection OK";
-            }
-        }
-
-        #endregion
 
         #region GUI
 
@@ -90,6 +75,9 @@ namespace NetPulseCheck
             textBoxTargetDesc02.Text = "Cloudflare DNS";
             textBoxTargetIp03.Text = "4.2.2.2";
             textBoxTargetDesc03.Text = "Level3 nameserver";
+            richTextBoxAbout.AppendText(Application.ProductName + " " + Application.ProductVersion+ "\n\n");
+            richTextBoxAbout.AppendText("Simple app to check for network outages on a Windows PC." + "\n\n");
+            richTextBoxAbout.AppendText("Contact: vuckovic.miroslav@gmail.com" + "\n\n");
         }
         #endregion
 
@@ -135,6 +123,7 @@ namespace NetPulseCheck
             }
             catch (Exception ex)
             {
+                logger.WriteLog(ex.Message);
             }
         }
 
@@ -152,60 +141,65 @@ namespace NetPulseCheck
             }
             catch (Exception ex)
             {
+                logger.WriteLog(ex.Message);
             }
         }
 
         private string PingTargets(string hostname, int timeout, string dnsName = "")
         {
-            Ping ping = new();
+            Query pingQuery = new Query(hostname, timeout, dnsName);
 
-            PingReply pingReply = ping.Send(hostname, timeout);
+            return pingQuery.PingTargets();
 
-            char separator = ';';
 
-            string logTextSuccess = hostname + " = " + pingReply.RoundtripTime + " ms" + " - (" + dnsName + ")";
-            string logTextFail = MsgStrings(0) + " " + hostname + " (" + dnsName + ")";
-            //string notifTextFail = "Connection fail detected" + " for" + hostname + " (" + dnsName + ")";
+            //Ping ping = new();
 
-            string logText = hostname + separator + pingReply.RoundtripTime + " ms" + " - (" + dnsName + ")";
+            //PingReply pingReply = ping.Send(hostname, timeout);
 
-            try
-            {
-                switch (pingReply.Status)
-                {
-                    case IPStatus.DestinationHostUnreachable:
-                        logger.WriteLog("Destination host unreachable" + separator + logText);
-                        //richTextBoxLog.AppendText(logTextFail);
-                        //DisplayNotification(Application.ProductName, "Destination host unreachable", 2000, true);
-                        return "Destination host unreachable";
-                    case IPStatus.DestinationUnreachable:
-                        logger.WriteLog("Destination unreachable" + separator + logText);
-                        //richTextBoxLog.AppendText(logTextFail);
-                        //DisplayNotification(Application.ProductName, "Destination unreachable", 2000, true);
-                        return "Destination unreachable";
-                    case IPStatus.TimedOut:
-                        logger.WriteLog("Destination timed out" + separator + logText);
-                        //richTextBoxLog.AppendText(logTextFail);
-                        //DisplayNotification(Application.ProductName, "Destination timed out", 2000, true);
-                        return "Destination timed out";
-                    default:
-                        logger.WriteLog(logText);
-                        //richTextBoxLog.AppendText(logTextSuccess);
-                        //DisplayNotification(Application.ProductName, "Destination success", 2000, true);
-                        return "" + pingReply.RoundtripTime;
-                }
-            }
-            catch
-            {
-                logger.WriteLog(logText);
-                richTextBoxLog.AppendText(logText);
-                //DisplayNotification(Application.ProductName, "Destination exception", 2000, true);
-                while (pingReply.Status == IPStatus.DestinationHostUnreachable)
-                {
-                    return "Destination exception";
-                }
-                return "Destination exception";
-            }
+            //char separator = ';';
+
+            //string logTextSuccess = hostname + " = " + pingReply.RoundtripTime + " ms" + " - (" + dnsName + ")";
+            //string logTextFail = Globals.MsgStrings(0) + " " + hostname + " (" + dnsName + ")";
+
+            //string logText = hostname + separator + pingReply.RoundtripTime + " ms" + " - (" + dnsName + ")";
+
+            //try
+            //{
+            //    switch (pingReply.Status)
+            //    {
+            //        case IPStatus.DestinationHostUnreachable:
+            //            logger.WriteLog("Destination host unreachable" + separator + logText);
+            //            //richTextBoxLog.AppendText(logTextFail);
+            //            //DisplayNotification(Application.ProductName, "Destination host unreachable", 2000, true);
+            //            return "Destination host unreachable";
+            //        case IPStatus.DestinationUnreachable:
+            //            logger.WriteLog("Destination unreachable" + separator + logText);
+            //            //richTextBoxLog.AppendText(logTextFail);
+            //            //DisplayNotification(Application.ProductName, "Destination unreachable", 2000, true);
+            //            return "Destination unreachable";
+            //        case IPStatus.TimedOut:
+            //            logger.WriteLog("Destination timed out" + separator + logText);
+            //            //richTextBoxLog.AppendText(logTextFail);
+            //            //DisplayNotification(Application.ProductName, "Destination timed out", 2000, true);
+            //            return "Destination timed out";
+            //        default:
+            //            logger.WriteLog(logText);
+            //            //richTextBoxLog.AppendText(logTextSuccess);
+            //            //DisplayNotification(Application.ProductName, "Destination success", 2000, true);
+            //            return "" + pingReply.RoundtripTime;
+            //    }
+            //}
+            //catch
+            //{
+            //    logger.WriteLog(logText);
+            //    richTextBoxLog.AppendText(logText);
+            //    //DisplayNotification(Application.ProductName, "Destination exception", 2000, true);
+            //    while (pingReply.Status == IPStatus.DestinationHostUnreachable)
+            //    {
+            //        return "Destination exception";
+            //    }
+            //    return "Destination exception";
+            //}
         }
 
         #endregion

@@ -68,6 +68,8 @@
             label1 = new Label();
             buttonSetLogDir = new Button();
             textBoxLogPath = new TextBox();
+            tabPageAbout = new TabPage();
+            richTextBoxAbout = new RichTextBox();
             notifyIconMain = new NotifyIcon(components);
             contextMenuStripMain = new ContextMenuStrip(components);
             toolStripMenuItemMaximize = new ToolStripMenuItem();
@@ -83,6 +85,7 @@
             tabPageOptions.SuspendLayout();
             groupBoxOptionsApp.SuspendLayout();
             groupBoxLogging.SuspendLayout();
+            tabPageAbout.SuspendLayout();
             contextMenuStripMain.SuspendLayout();
             SuspendLayout();
             // 
@@ -90,6 +93,7 @@
             // 
             tabControlMain.Controls.Add(tabPageControls);
             tabControlMain.Controls.Add(tabPageOptions);
+            tabControlMain.Controls.Add(tabPageAbout);
             tabControlMain.Location = new Point(12, 12);
             tabControlMain.Name = "tabControlMain";
             tabControlMain.SelectedIndex = 0;
@@ -471,6 +475,26 @@
             textBoxLogPath.Size = new Size(285, 23);
             textBoxLogPath.TabIndex = 1;
             // 
+            // tabPageAbout
+            // 
+            tabPageAbout.Controls.Add(richTextBoxAbout);
+            tabPageAbout.Location = new Point(4, 24);
+            tabPageAbout.Name = "tabPageAbout";
+            tabPageAbout.Size = new Size(702, 520);
+            tabPageAbout.TabIndex = 2;
+            tabPageAbout.Text = "About";
+            tabPageAbout.UseVisualStyleBackColor = true;
+            // 
+            // richTextBoxAbout
+            // 
+            richTextBoxAbout.Dock = DockStyle.Fill;
+            richTextBoxAbout.Location = new Point(0, 0);
+            richTextBoxAbout.Name = "richTextBoxAbout";
+            richTextBoxAbout.ReadOnly = true;
+            richTextBoxAbout.Size = new Size(702, 520);
+            richTextBoxAbout.TabIndex = 0;
+            richTextBoxAbout.Text = "";
+            // 
             // notifyIconMain
             // 
             notifyIconMain.ContextMenuStrip = contextMenuStripMain;
@@ -531,7 +555,7 @@
             Controls.Add(tabControlMain);
             Icon = (Icon)resources.GetObject("$this.Icon");
             MaximizeBox = false;
-            MaximumSize = new Size(750, 750);
+            MaximumSize = new Size(750, 600);
             MinimumSize = new Size(750, 600);
             Name = "FormMain";
             StartPosition = FormStartPosition.CenterScreen;
@@ -548,6 +572,7 @@
             groupBoxOptionsApp.PerformLayout();
             groupBoxLogging.ResumeLayout(false);
             groupBoxLogging.PerformLayout();
+            tabPageAbout.ResumeLayout(false);
             contextMenuStripMain.ResumeLayout(false);
             ResumeLayout(false);
         }
@@ -600,5 +625,7 @@
         private ToolStripMenuItem toolStripMenuItemExit;
         private ToolStripSeparator toolStripSeparator2;
         private ToolStripSeparator toolStripSeparator1;
+        private TabPage tabPageAbout;
+        private RichTextBox richTextBoxAbout;
     }
 }
