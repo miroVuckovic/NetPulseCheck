@@ -37,30 +37,24 @@ namespace NetPulseCheck
                 switch (pingReply.Status)
                 {
                     case IPStatus.DestinationHostUnreachable:
-                        return "Destination host unreachable" + separator + logText;
-                        //return "Destination host unreachable";
+                        return "Destination host unreachable";
                     case IPStatus.DestinationUnreachable:
-                        return "Destination unreachable" + separator + logText;
-                        //return "Destination unreachable";
+                        return "Destination unreachable";
                     case IPStatus.TimedOut:
-                        return "Destination timed out" + separator + logText;
-                        //return "Destination timed out";
+                        return "Destination timed out";
                     default:
-                        //logger.WriteLog(logText);
                         return "" + pingReply.RoundtripTime;
                 }
             }
             catch
             {
-                //logger.WriteLog(logText);
-
                 while (pingReply.Status == IPStatus.DestinationHostUnreachable)
                 {
                     return "Destination host unreachable";
                 }
-
-                return logText;
+                return "-";
             }
+            
         }
     }
 }

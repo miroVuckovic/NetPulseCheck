@@ -1,6 +1,7 @@
 using System.ComponentModel;
 using System.Diagnostics;
 using System.Net.NetworkInformation;
+using System.Reflection.Metadata.Ecma335;
 using System.Timers;
 using System.Windows.Forms;
 
@@ -153,10 +154,17 @@ namespace NetPulseCheck
 
             char separator = ';';
 
-            logger.WriteLog(returnValue +" ms" + separator + "(" + dnsName + ")");
+            logger.WriteLog(returnValue + " ms" + separator  + hostname + separator + dnsName + separator);
 
             return returnValue;
 
+        }
+
+        private void CreateCSVHeader()
+        {
+            char separator = ';';
+
+            logger.WriteLog("Time" + separator + "Ping" + separator + "IP/DNS" + separator + "Target description" + separator,1);
         }
 
         #endregion
@@ -295,8 +303,10 @@ namespace NetPulseCheck
 
             string startText = String.Format("Monitoring started with interval of {0}ms.", pingInterval.ToString());
 
+            CreateCSVHeader();
+
             richTextBoxLog.AppendText(startText + " Logging to " + logger.fileNameMainLog + "\n");
-            logger.WriteLog(startText);
+            //logger.WriteLog(startText);
 
             buttonStart.Enabled = false;
             buttonStop.Enabled = true;
@@ -324,7 +334,7 @@ namespace NetPulseCheck
             SetControls(true);
 
             richTextBoxLog.AppendText("Monitoring stopped.\n");
-            logger.WriteLog("Monitoring stopped.");
+            //logger.WriteLog("Monitoring stopped.");
 
             labelTargetPing01.Text = "-";
             labelTargetPing02.Text = "-";
