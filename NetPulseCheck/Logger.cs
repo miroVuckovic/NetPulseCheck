@@ -4,6 +4,7 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using static System.Windows.Forms.VisualStyles.VisualStyleElement;
 
 namespace NetPulseCheck
 {
@@ -18,7 +19,7 @@ namespace NetPulseCheck
 
         string csvHeader = "Time";
 
-        string path = string.Empty;       
+        string path = string.Empty;
 
         private string GetPath()
         {
@@ -40,16 +41,12 @@ namespace NetPulseCheck
             GetPath();
         }
 
-        private string CreateCSVHeader()
+        public void CreateCSVHeader()
         {
-            char separator = ';';
-
-            string header = "Time" + separator + "Ping" + separator + "IP/DNS" + separator + "Target description" + separator;
-
-            return header;
+            WriteLog(string.Empty,1);
         }
 
-        public void WriteLog(string inputText)
+        public void WriteLog(string inputText, int headerSelect = 0)
         {
 
             GetPath();
@@ -58,26 +55,25 @@ namespace NetPulseCheck
             {
 
                 string csvLine = string.Format("{0:yyyy-MM-dd HH:mm:ss}" + separator + inputText, DateTime.Now);
+                string header = "Time" + separator + "Ping" + separator + "IP/DNS" + separator + "Target description" + separator;
+
+                if (headerSelect > 0)
+                {
+                    csvLine = header;
+                }
 
                 using (StreamWriter streamWriter = new StreamWriter(Path.Combine(path, fileNameMainLog), true))
+                {
                     streamWriter.WriteLine(csvLine);
+                }
+
+
             }
             catch
             {
                 MessageBox.Show("Unable to write log.", Application.ProductName + " - " + "Error");
                 return;
             }
-        }
-
-        public void WriteLog(int header = 0)
-        {
-            char separator = ';';
-
-            if (header > 0)
-            {
-                WriteLog("Time" + separator + "Ping" + separator + "IP/DNS" + separator + "Target description" + separator);
-            }
-            
         }
 
     }

@@ -162,7 +162,7 @@ namespace NetPulseCheck
 
         private void CreateCSVHeader()
         {
-            logger.WriteLog(1);
+            logger.CreateCSVHeader();
         }
 
         #endregion
