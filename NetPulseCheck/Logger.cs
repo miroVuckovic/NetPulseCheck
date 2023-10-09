@@ -18,9 +18,26 @@ namespace NetPulseCheck
 
         string csvHeader = "Time";
 
+        string path = string.Empty;       
+
+        private string GetPath()
+        {
+            if (Globals.logPath != null)
+            {
+                path = Globals.logPath;
+            }
+            else
+            {
+                path = Environment.GetFolderPath(Environment.SpecialFolder.Desktop);
+            }
+
+            return path;
+        }
+
         public Logger(string fileName = "log.csv")
         {
             fileNameMainLog = fileName;
+            GetPath();
         }
 
         private string CreateCSVHeader()
@@ -32,27 +49,15 @@ namespace NetPulseCheck
             return header;
         }
 
-        public void WriteLog(string inputText, int header = 0)
+        public void WriteLog(string inputText)
         {
-            string path;
-            if (Globals.logPath != null)
-            {
-                path = Globals.logPath;
-            }
-            else
-            {
-                path = Environment.GetFolderPath(Environment.SpecialFolder.Desktop);
-            }
+
+            GetPath();
 
             try
             {
 
                 string csvLine = string.Format("{0:yyyy-MM-dd HH:mm:ss}" + separator + inputText, DateTime.Now);
-
-                if (header > 0)
-                {
-                    csvLine = inputText;
-                }
 
                 using (StreamWriter streamWriter = new StreamWriter(Path.Combine(path, fileNameMainLog), true))
                     streamWriter.WriteLine(csvLine);
@@ -62,6 +67,17 @@ namespace NetPulseCheck
                 MessageBox.Show("Unable to write log.", Application.ProductName + " - " + "Error");
                 return;
             }
+        }
+
+        public void WriteLog(int header = 0)
+        {
+            char separator = ';';
+
+            if (header > 0)
+            {
+                WriteLog("Time" + separator + "Ping" + separator + "IP/DNS" + separator + "Target description" + separator);
+            }
+            
         }
 
     }

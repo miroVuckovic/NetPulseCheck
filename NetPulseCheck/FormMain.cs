@@ -162,9 +162,7 @@ namespace NetPulseCheck
 
         private void CreateCSVHeader()
         {
-            char separator = ';';
-
-            logger.WriteLog("Time" + separator + "Ping (ms)" + separator + "IP/DNS" + separator + "Target description" + separator,1);
+            logger.WriteLog(1);
         }
 
         #endregion
