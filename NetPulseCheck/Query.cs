@@ -9,8 +9,6 @@ namespace NetPulseCheck
 {
     internal class Query
     {
-        Logger logger = new Logger();
-
         private string hostname;
         private int timeout;
         private string dnsName;
@@ -27,10 +25,6 @@ namespace NetPulseCheck
             Ping ping = new();
 
             PingReply pingReply = ping.Send(hostname, timeout);
-
-            char separator = ';';
-
-            string logText = hostname + separator + pingReply.RoundtripTime + separator +  "(" + dnsName + ")";
 
             try
             {
