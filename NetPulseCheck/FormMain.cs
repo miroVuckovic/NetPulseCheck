@@ -18,9 +18,7 @@ namespace NetPulseCheck
             comboBoxLogLevel.SelectedItem = "ERROR";
             comboBoxCSVSeparator.SelectedItem = ";";
 
-            //SaveAllSettings();
             ReadAllSettings();
-            //SetPingInterval();
 
             SetControls(true);
         }
@@ -148,7 +146,7 @@ namespace NetPulseCheck
 
         private string PingTargets(string hostname, int timeout, string dnsName = "")
         {
-            Query pingQuery = new Query(hostname, timeout, dnsName);
+            Query pingQuery = new Query(hostname, timeout);
 
             string returnValue = pingQuery.PingTargets();
 

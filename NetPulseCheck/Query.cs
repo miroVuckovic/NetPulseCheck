@@ -11,13 +11,11 @@ namespace NetPulseCheck
     {
         private string hostname;
         private int timeout;
-        private string dnsName;
 
-        public Query(string hostname, int timeout, string dnsName)
+        public Query(string hostname, int timeout)
         {
             this.hostname = hostname;
             this.timeout = timeout;
-            this.dnsName = dnsName;
         }
 
         public string PingTargets()
