@@ -5,10 +5,16 @@ using System.Net.NetworkInformation;
 using System.Text;
 using System.Threading.Tasks;
 
+
+
 namespace NetPulseCheck
 {
     internal class Query
     {
+        /// <summary>
+        /// Class to carry out a ping query and return a ping value.
+        /// </summary>
+
         private string hostname;
         private int timeout;
 
@@ -18,7 +24,7 @@ namespace NetPulseCheck
             this.timeout = timeout;
         }
 
-        public string PingTargets()
+        public string PingTarget()
         {
             Ping ping = new();
 

@@ -8,6 +8,10 @@ namespace NetPulseCheck
 {
     internal class Globals
     {
+        /// <summary>
+        /// Class for transitional info between classes, uniformed output and whatnot...
+        /// </summary>
+
         public static string logPath = string.Empty;
 
         #region Messages

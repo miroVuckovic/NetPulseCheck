@@ -22,7 +22,7 @@ namespace NetPulseCheck
 
             SetControls(true);
         }
-
+                
         int monitoringState = 0;
 
         Logger logger = new Logger();
@@ -30,6 +30,8 @@ namespace NetPulseCheck
         SettingsHandler settingsHandler = new SettingsHandler();
 
         #region backgroundWorker
+
+        // backgroundWorker bWorker runs the Query class in the separate in order to not block the GUI.
 
         BackgroundWorker bWorker = new BackgroundWorker()
         {
@@ -85,6 +87,7 @@ namespace NetPulseCheck
 
         #region ping
 
+        // This one is started from the background worker.
         public void PingAllTargets()
         {
             PingTarget01(textBoxTargetIp01.Text, Convert.ToInt32(pingTimeout));
@@ -146,18 +149,18 @@ namespace NetPulseCheck
             }
         }
 
+        // Here we get the ping value.
         private string PingTargets(string hostname, int timeout, string dnsName = "")
         {
             Query pingQuery = new Query(hostname, timeout);
 
-            string returnValue = pingQuery.PingTargets();
+            string returnValue = pingQuery.PingTarget();
 
             char separator = ';';
 
             logger.WriteLog(returnValue + separator  + hostname + separator + dnsName + separator);
 
             return returnValue;
-
         }
 
         private void CreateCSVHeader()
@@ -196,6 +199,7 @@ namespace NetPulseCheck
 
         private void StopTimer() => pingTimer.Stop();
 
+        // Start pinging when timer interval expires.
         private void OnTimedEvent(object source, ElapsedEventArgs e)
         {
             PingTarget01(textBoxTargetIp01.Text, Convert.ToInt32(pingInterval));
@@ -284,6 +288,7 @@ namespace NetPulseCheck
 
         private void StartMonitoring()
         {
+            // We can't start monitoring if no target is selected.
             if (!checkBoxActivate01.Checked && !checkBoxActivate02.Checked && !checkBoxActivate03.Checked)
             {
                 MessageBox.Show("Nothing selected.\n\nPlease check at least one target.", Application.ProductName);
@@ -298,12 +303,11 @@ namespace NetPulseCheck
 
             bWorker.RunWorkerAsync();
 
-            string startText = String.Format("Monitoring started with interval of {0}ms.", pingInterval.ToString());
+            string startingText = String.Format("Monitoring started with interval of {0}ms.", pingInterval.ToString());
 
             CreateCSVHeader();
 
-            richTextBoxLog.AppendText(startText + " Logging to " + logger.fileNameMainLog + "\n");
-            //logger.WriteLog(startText);
+            richTextBoxLog.AppendText(startingText + " Logging to " + logger.fileNameMainLog + "\n");
 
             buttonStart.Enabled = false;
             buttonStop.Enabled = true;
@@ -331,7 +335,6 @@ namespace NetPulseCheck
             SetControls(true);
 
             richTextBoxLog.AppendText("Monitoring stopped.\n");
-            //logger.WriteLog("Monitoring stopped.");
 
             labelTargetPing01.Text = "-";
             labelTargetPing02.Text = "-";
@@ -340,6 +343,7 @@ namespace NetPulseCheck
             monitoringState = 0;
         }
 
+        // We need to enable or disable controls depending if monitoring is running or not.
         private void SetControls(bool state)
         {
             buttonStop.Enabled = !state;

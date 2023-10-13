@@ -8,6 +8,14 @@ namespace NetPulseCheck
 {
     internal class ThreadHelperClass
     {
+
+        /// <summary>
+        /// This is a helper class to populate data in form controls from another thread.
+        /// There is background worker implemented in FormMain.cs.
+        /// </summary>
+        /// <param name="form"></param>
+        /// <param name="ctrl"></param>
+        /// <param name="text"></param>
         public static void SetText(Form form, Control ctrl, string text)
         {
             if (ctrl.InvokeRequired)
