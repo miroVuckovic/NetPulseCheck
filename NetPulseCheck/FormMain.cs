@@ -27,6 +27,8 @@ namespace NetPulseCheck
 
         Logger logger = new Logger();
 
+        SettingsHandler settingsHandler = new SettingsHandler();
+
         #region backgroundWorker
 
         BackgroundWorker bWorker = new BackgroundWorker()
@@ -289,7 +291,6 @@ namespace NetPulseCheck
             }
 
             logger.fileNameMainLog = string.Format("{0:yyyy-MM-dd_HH_mm_ss}", DateTime.Now) + ".csv";
-            logger.separator = ';';
 
             SetPingInterval();
 
@@ -373,16 +374,16 @@ namespace NetPulseCheck
 
         #region Settings
 
-        private static void SaveSetting(string key, string value)
+        private void SaveSetting(string key, string value)
         {
-            SettingsHandler.SaveSetting(key, value);
+            settingsHandler.SaveSetting(key, value);
         }
 
-        private static string ReadSetting(string key)
+        private string ReadSetting(string key)
         {
             string setting;
 
-            setting = SettingsHandler.ReadSetting(key);
+            setting = settingsHandler.ReadSetting(key);
 
             return setting;
         }

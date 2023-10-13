@@ -2,7 +2,7 @@
 {
     internal class Logger
     {
-        private string fileNameMainLog;
+        public string fileNameMainLog;
 
         private char separator = ';';
 
@@ -20,6 +20,18 @@
             }
 
             return path;
+        }
+
+        public void SetFileNamePath()
+        {
+            if (Globals.logPath != null)
+            {
+                path = Globals.logPath;
+            }
+            else
+            {
+                path = Environment.GetFolderPath(Environment.SpecialFolder.Desktop);
+            }
         }
 
         public Logger(string fileName = "log.csv")

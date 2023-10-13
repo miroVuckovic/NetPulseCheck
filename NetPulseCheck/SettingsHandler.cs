@@ -7,9 +7,14 @@ using System.Threading.Tasks;
 
 namespace NetPulseCheck
 {
-    internal class SettingsHandler
+    public class SettingsHandler
     {
-        public static void SaveSetting(string key, string value)
+
+        public SettingsHandler()
+        {
+        }
+
+        public void SaveSetting(string key, string value)
         {
             try
             {
@@ -32,9 +37,10 @@ namespace NetPulseCheck
             }
         }
 
-        public static string ReadSetting(string key)
+        public string ReadSetting(string key)
         {
-            string result;
+            string result = string.Empty;
+
             try
             {
                 var appSettings = ConfigurationManager.AppSettings;
