@@ -1,3 +1,3 @@
 # NetPulseCheck
 
-Simple app to check for network outages on a Windows PC.
+Simple app to check for network outages and monitor connectivity on a Windows PC.
