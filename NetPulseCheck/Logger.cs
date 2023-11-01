@@ -50,27 +50,27 @@
 
             GetPath();
 
+
+            string csvLine = string.Format("{0:yyyy-MM-dd HH:mm:ss}" + separator + inputText, DateTime.Now);
+            string header = "Time" + separator + "Ping" + separator + "IP/DNS" + separator + "Target description" + separator;
+
+            if (headerSelect > 0)
+            {
+                csvLine = header;
+            }
+
             try
             {
-
-                string csvLine = string.Format("{0:yyyy-MM-dd HH:mm:ss}" + separator + inputText, DateTime.Now);
-                string header = "Time" + separator + "Ping" + separator + "IP/DNS" + separator + "Target description" + separator;
-
-                if (headerSelect > 0)
-                {
-                    csvLine = header;
-                }
 
                 using (StreamWriter streamWriter = new StreamWriter(Path.Combine(path, fileNameMainLog), true))
                 {
                     streamWriter.WriteLine(csvLine);
                 }
 
-
             }
-            catch
+            catch (Exception ex)
             {
-                MessageBox.Show("Unable to write log.", Application.ProductName + " - " + "Error");
+                MessageBox.Show("Unable to write log.\n\n" + ex.Message, Application.ProductName + " - " + "Error");
                 return;
             }
         }

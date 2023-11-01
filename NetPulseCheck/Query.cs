@@ -50,6 +50,7 @@ namespace NetPulseCheck
                 {
                     return "Destination host unreachable";
                 }
+
                 return "-";
             }
             

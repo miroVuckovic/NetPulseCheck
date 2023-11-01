@@ -16,24 +16,26 @@ namespace NetPulseCheck
 
         public void SaveSetting(string key, string value)
         {
+            var configFile = ConfigurationManager.OpenExeConfiguration(ConfigurationUserLevel.None);
+            var settings = configFile.AppSettings.Settings;
+
+            if (settings[key] == null)
+            {
+                settings.Add(key, value);
+            }
+            else
+            {
+                settings[key].Value = value;
+            }
+
             try
             {
-                var configFile = ConfigurationManager.OpenExeConfiguration(ConfigurationUserLevel.None);
-                var settings = configFile.AppSettings.Settings;
-                if (settings[key] == null)
-                {
-                    settings.Add(key, value);
-                }
-                else
-                {
-                    settings[key].Value = value;
-                }
                 configFile.Save(ConfigurationSaveMode.Modified);
                 ConfigurationManager.RefreshSection(configFile.AppSettings.SectionInformation.Name);
             }
-            catch (ConfigurationErrorsException)
+            catch (ConfigurationErrorsException ex)
             {
-                MessageBox.Show("Error writing app settings",Application.ProductName);
+                MessageBox.Show("Error writing app settings\n\n" + ex.Message,Application.ProductName +" - Error");
             }
         }
 
@@ -41,9 +43,10 @@ namespace NetPulseCheck
         {
             string result = string.Empty;
 
+            var appSettings = ConfigurationManager.AppSettings;
+
             try
-            {
-                var appSettings = ConfigurationManager.AppSettings;
+            {            
                 result = appSettings[key];
             }
             catch (ConfigurationErrorsException)
